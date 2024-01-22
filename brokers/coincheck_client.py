@@ -2,13 +2,14 @@
 
 import logging
 from django.conf import settings
+from brokers.config.broker_config import coincheck
 
 
-class BrokerExampleClient:
-    def __init__(self, api_config):
-        self.api_key = api_config["api_key"]
-        self.secret_key = api_config["secret_key"]
-        self.account_id = api_config["account_id"]
+class CoincheckClient:
+    def __init__(self):
+        api_config = coincheck
+        self.api_key = api_config.api_key
+        self.secret_key = api_config.secret_key
         # Initialize any other necessary parameters
 
         # Use Django's logger

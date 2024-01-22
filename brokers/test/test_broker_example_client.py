@@ -1,34 +1,33 @@
-# brokers/test/test_broker_example_client.py
+# test_broker_example_client.py
 from django.test import TestCase
-from brokers.broker_example_client import BrokerExampleClient
+from brokers.config.broker_config import *
 
-class BrokerExampleClientTestCase(TestCase):
-    def setUp(self):
-        # Setup code for your test, if needed
-        pass
 
-    def tearDown(self):
-        # Cleanup code after each test, if needed
-        pass
+class ApiSettingsTest(TestCase):
+    def test_broker1_config(self):
+        # Creating an instance of BrokerConfig for broker1
+        config = BrokerConfig(
+            api_key="your_broker1_api_key",
+            secret_key="your_broker1_secret_key",
+            account_id="your_broker1_account_id",
+            # Add any other specific configuration parameters for broker1
+        )
 
-    def test_authentication(self):
-        # Write test cases for authentication
-        # Instantiate BrokerExampleClient and test authentication logic
-        broker_client = BrokerExampleClient(api_key='your_key', secret_key='your_secret')
-        self.assertTrue(broker_client.authenticate(), "Authentication failed.")
+        self.assertEqual(broker1_config.api_key, config.api_key)
+        self.assertEqual(broker1_config.secret_key, config.secret_key)
+        self.assertEqual(broker1_config.account_id, config.account_id)
+        # Add any additional assertions for broker1_config
 
-    def test_place_order(self):
-        # Write test cases for placing orders
-        # Instantiate BrokerExampleClient and test place_order logic
-        broker_client = BrokerExampleClient(api_key='your_key', secret_key='your_secret')
-        order_result = broker_client.place_order(symbol='AAPL', quantity=10, order_type='buy', price=150.0)
-        self.assertTrue(order_result, "Order placement failed.")
+    def test_broker2_config(self):
+        # Creating an instance of BrokerConfig for broker2
+        config = BrokerConfig(
+            api_key="your_broker2_api_key",
+            secret_key="your_broker2_secret_key",
+            account_id="your_broker2_account_id",
+            # Add any other specific configuration parameters for broker2
+        )
 
-    def test_check_balance(self):
-        # Write test cases for checking balance
-        # Instantiate BrokerExampleClient and test check_balance logic
-        broker_client = BrokerExampleClient(api_key='your_key', secret_key='your_secret')
-        balance = broker_client.check_balance()
-        self.assertIsNotNone(balance, "Balance retrieval failed.")
-
-# Add more test cases as needed
+        self.assertEqual(broker1_config.api_key, config.api_key)
+        self.assertEqual(broker1_config.secret_key, config.secret_key)
+        self.assertEqual(broker1_config.account_id, config.account_id)
+        # Add any additional assertions for broker2_config

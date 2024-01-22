@@ -17,7 +17,7 @@ services:
     volumes:
       - ../:/app
     container_name: utx
-    command: bash -c "python /app/main.py runserver 0.0.0.0:8080"
+    # command: bash -c "python /app/main.py runserver 0.0.0.0:8080"
     environment:
       - DJANGO_DB_HOST=postgres
       - DJANGO_DB_PORT=5432

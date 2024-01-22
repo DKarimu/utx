@@ -22,4 +22,4 @@ COPY . /app/
 EXPOSE 8080
 
 # Run the command to start the Django development server
-CMD ["bash", "torun.sh"]
+# CMD ["bash", "torun.sh"]
