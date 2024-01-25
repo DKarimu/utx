@@ -1,6 +1,4 @@
 # broker_config.py
-
-
 class BrokerConfig:
     def __init__(
         self,
@@ -25,13 +23,29 @@ coincheck = BrokerConfig(
     secret_key="coincheck_secret_key",
     base_url="https://coincheck.com",
     api_urls={
+        "accounts": "/api/accounts",
+        "accounts_ticker": "/api/accounts/ticker",
+        "accounts_balance": "/api/accounts/balance",
         "ticker": "/api/ticker",
         "trades": "/api/trades",
         "order_books": "/api/order_books",
+        "exchange_orders_rate": "/api/exchange/orders/rate",
+        "rate_pair": "/api/rate/",  # /api/rate/[pair]
+        "exchange_orders": "/api/exchange/orders",
+        "exchange_orders_opens": "/api/exchange/orders/opens",
+        "exchange_orders_id": "/api/exchange/orders/",  # /api/exchange/orders/[id]
+        "exchange_orders_cancel_status": "/api/exchange/orders/cancel_status?id=",  # /api/exchange/orders/cancel_status?id=[id]
+        "exchange_orders_transactions": "/api/exchange/orders/transactions",
+        "exchange_orders_transactions_pagination": "/api/exchange/orders/transactions_pagination",
+        "send_money": "/api/send_money",
+        "deposit_money": "/api/deposit_money",
+        "bank_accounts": "/api/bank_accounts",
+        "remove_bank_account": "/api/bank_accounts/",  # /api/bank_accounts/[id]
+        "withdraws": "/api/withdraws",
+        "cancel_withdrawal_request": "/api/withdraws/",  # /api/withdraws/[id]
     },
 )
 broker1_config = BrokerConfig(
-    base_url="",
     api_key="your_broker2_api_key",
     secret_key="your_broker2_secret_key",
     account_id="your_broker2_account_id",

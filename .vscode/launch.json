@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Debug Coincheck Client Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "test",
+                "brokers.test.test_coincheck_client"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "DJANGO_DEBUG_LOG": "true"
+            }
+        }
+    ]
+}
