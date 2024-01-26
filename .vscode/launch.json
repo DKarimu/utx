@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "Python: Debug",
             "type": "python",
@@ -10,13 +11,13 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Debug Coincheck Client Test",
+            "name": "Python: Debug Brokers Tests",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "args": [
                 "test",
-                "brokers.test.test_coincheck_client"
+                "brokers/test"
             ],
             "console": "integratedTerminal",
             "justMyCode": true,

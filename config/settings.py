@@ -44,19 +44,19 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["file"],
+            "handlers": ["file", "debug_file"],
             "level": "INFO",  # Adjust the log level as needed
             "propagate": True,
         },
         "django.db.backends": {
-            "handlers": ["debug_file"],
+            "handlers": ["file"],
             "level": "DEBUG",
             "propagate": False,
         },
     },
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} {module} {message}",
+            "format": "{levelname} {asctime} {module} {class_name} {method_name}: {message}",
             "style": "{",
         },
     },
