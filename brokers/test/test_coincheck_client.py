@@ -10,11 +10,17 @@ class TestCoincheckClient(SimpleTestCase):
     def test_ticker_returns_error(self):
         coincheck_client = CoincheckClient()
 
-        result = coincheck_client.ticker()
+        result = coincheck_client.get_ticker()
         self.assertNotIn("error", result)
 
-        result = coincheck_client.trades("btc_jpy")
+        result = coincheck_client.get_trades("btc_jpy")
         self.assertNotIn("error", result)
 
-        result = coincheck_client.orderbooks()
+        result = coincheck_client.get_orderbooks()
+        self.assertNotIn("error", result)
+
+        result = coincheck_client.get_balance()
+        self.assertNotIn("error", result)
+
+        result = coincheck_client.get_accounts()
         self.assertNotIn("error", result)

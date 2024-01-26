@@ -2,15 +2,15 @@
 class BrokerConfig:
     def __init__(
         self,
-        api_key=None,
-        secret_key=None,
+        access_key=None,
+        secret_access_key=None,
         account_id=None,
         base_url=None,
         api_urls=None,
         **kwargs
     ):
-        self.api_key = api_key
-        self.secret_key = secret_key
+        self.api_key = access_key
+        self.secret_key = secret_access_key
         self.account_id = account_id
         self.base_url = base_url
         self.api_urls = api_urls
@@ -19,8 +19,8 @@ class BrokerConfig:
 
 # Define instances for broker1 and broker2
 coincheck = BrokerConfig(
-    api_key="coincheck_api_key",
-    secret_key="coincheck_secret_key",
+    access_key="",
+    secret_access_key="",
     base_url="https://coincheck.com",
     api_urls={
         "accounts": "/api/accounts",
@@ -46,8 +46,8 @@ coincheck = BrokerConfig(
     },
 )
 broker1_config = BrokerConfig(
-    api_key="your_broker2_api_key",
-    secret_key="your_broker2_secret_key",
+    access_key="your_broker2_api_key",
+    secret_access_key="your_broker2_secret_key",
     account_id="your_broker2_account_id",
     base_url="",
 )
