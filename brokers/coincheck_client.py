@@ -279,4 +279,4 @@ class CoincheckClient:
             method_name, f"Placing new order for pair: {pair} Parameters {payload}"
         )
 
-        return self.private_request("new_order", **payload)
+        return self.private_request(method_name, **payload)
