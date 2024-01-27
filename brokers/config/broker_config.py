@@ -19,19 +19,19 @@ class BrokerConfig:
 
 # Define instances for broker1 and broker2
 coincheck = BrokerConfig(
-    access_key="",
-    secret_access_key="",
+    access_key="S3sSX8yINaFMry9l",
+    secret_access_key="XjwMvdpQT8_QJWyJEXNYyLir6YzeI1j",
     base_url="https://coincheck.com",
     api_urls={
-        "accounts": "/api/accounts",
-        "accounts_ticker": "/api/accounts/ticker",
-        "accounts_balance": "/api/accounts/balance",
-        "ticker": "/api/ticker",
-        "trades": "/api/trades",
-        "order_books": "/api/order_books",
-        "exchange_orders_rate": "/api/exchange/orders/rate",
-        "rate_pair": "/api/rate/",  # /api/rate/[pair]
-        "exchange_orders": "/api/exchange/orders",
+        "get_ticker": "/api/ticker",
+        "get_trades": "/api/trades",
+        "get_orderbooks": "/api/order_books",
+        "get_calc_rate": "/api/exchange/orders/rate",
+        "get_standard_rate": "/api/rate/{}",  # /api/rate/[pair]
+        "get_accounts": "/api/accounts",
+        "get_accounts_ticker": "/api/accounts/ticker",
+        "get_accounts_balance": "/api/accounts/balance",
+        "post_new_order": "/api/exchange/orders",
         "exchange_orders_opens": "/api/exchange/orders/opens",
         "exchange_orders_id": "/api/exchange/orders/",  # /api/exchange/orders/[id]
         "exchange_orders_cancel_status": "/api/exchange/orders/cancel_status?id=",  # /api/exchange/orders/cancel_status?id=[id]
