@@ -93,7 +93,6 @@ class CoincheckClient:
         Make a private request to the exchange API.
 
         Parameters:
-            :method: HTTP method ("GET", "POST", or "DELETE").
             :request: API endpoint.
             :kwargs: Request parameters.
 
