@@ -25,28 +25,27 @@ class CoincheckClient:
         # Set up a logger for the class
         self.log = logging.getLogger("django." + self.__class__.__name__)
 
-    def construct_request_url(self, request, pair=None, **kwargs):
+    def construct_request_url(self, request, pair=None, id=None, **kwargs):
         request_endpoint = coincheck.api_urls.get(request)
 
         if not request_endpoint:
-            raise ValueError(f"Invalid request: {request}")
+            return ValueError(f"Invalid request: {request}")
 
-        if "{}" in request_endpoint and not pair:
-            raise ValueError("Pair is required for this request.")
+        if "{}" in request_endpoint and not (pair or id):
+            return ValueError("Pair is required for this request.")
 
         formatted_endpoint = (
-            request_endpoint.format(pair)
-            if "{}" in request_endpoint
+            request_endpoint.format(pair or id)
+            if "{}" in request_endpoint and (pair or id)
             else request_endpoint
         )
-        pair_parameter = f"pair={pair}" if pair else ""
+        if id:
+            param = f"id={id}"
+        else:
+            param = f"pair={pair}" if pair else ""
         parameters = (
-            (
-                f"?{pair_parameter}&{urlencode(kwargs)}"
-                if kwargs
-                else f"?{pair_parameter}"
-            )
-            if pair_parameter
+            (f"?{param}&{urlencode(kwargs)}" if kwargs else f"?{param}")
+            if param
             else ""
         )
         return f"{coincheck.base_url}{formatted_endpoint}{parameters}"
@@ -113,7 +112,7 @@ class CoincheckClient:
             elif "delet" in request:
                 response = requests.delete(request_url, headers=headers)
             else:
-                raise ValueError(
+                return ValueError(
                     "Invalid HTTP method. Supported methods: GET, POST, DELETE"
                 )
             response.raise_for_status()  # Raises HTTPError for bad responses
@@ -159,8 +158,9 @@ class CoincheckClient:
         Ticker
         Check the latest information for a specified pair.
         If pair is not specified, it defaults to btc_jpy.
-            :param pair: Pair (e.g., "btc_jpy")
 
+        Parameters:
+            :param pair Pair (e.g., "btc_jpy")
         Returns:
             :Result of the Ticker request.
         """
@@ -173,8 +173,9 @@ class CoincheckClient:
         Public trades
         Get current order transactions for a specified pair.
         If pair is not specified, it defaults to btc_jpy.
-            :param pair: Pair (e.g., "btc_jpy")
 
+        Parameters:
+            :param pair Pair (e.g., "btc_jpy")
         Returns:
             :Result of the Public trades request.
         """
@@ -199,12 +200,13 @@ class CoincheckClient:
         """
         Calc Rate
         Calculate the rate from the order of the exchange.
-            :param order_type: Order type ("sell" or "buy").
-            :param pair: Pair (e.g., "btc_jpy").
-            :param amount: Order amount (e.g., 0.1).
-            :param price: Order price (e.g., 28000).
-        ※Either price or amount must be specified as a parameter.
 
+        Parameters:
+            :param order_type Order type ("sell" or "buy").
+            :param pair Pair (e.g., "btc_jpy").
+            :param amount Order amount (e.g., 0.1).
+            :param price Order price (e.g., 28000).
+        ※Either price or amount must be specified as a parameter.
         Returns:
             :rate Order rate
             :price Order price
@@ -226,8 +228,9 @@ class CoincheckClient:
         """
         Standard Rate
         Get the standard rate of the coin.
-            :pair: Pair (e.g., "btc_jpy").
 
+        Parameters:
+            :pair Pair (e.g., "btc_jpy").
         Returns:
             :rate
         """
@@ -250,15 +253,15 @@ class CoincheckClient:
         """
         New order
         Publish a new order to the exchange.
-        Parameters:
-            :pair: Specify a currency pair to trade (e.g., btc_jpy).
-            :order_type: Specify order_type ("buy", "sell", "market_buy", "market_sell").
-            :rate: Order rate (e.g., 30000).
-            :amount: Order amount (e.g., 10).
-            :market_buy_amount: Market buy amount in JPY (required for market_buy).
-            :stop_loss_rate: Stop Loss Rate (optional).
-            :time_in_force: Time In Force (optional, default is "good_til_cancelled" or use "post_only").
 
+        Parameters:
+            :pair Specify a currency pair to trade (e.g., btc_jpy).
+            :order_type Specify order_type ("buy", "sell", "market_buy", "market_sell").
+            :rate Order rate (e.g., 30000).
+            :amount Order amount (e.g., 10).
+            :market_buy_amount Market buy amount in JPY (required for market_buy).
+            :stop_loss_rate Stop Loss Rate (optional).
+            :time_in_force Time In Force (optional, default is "good_til_cancelled" or use "post_only").
         Returns:
             :Result of the new order request.
         """
@@ -284,16 +287,45 @@ class CoincheckClient:
         You can get a unsettled order list.
 
         Returns:
-            :id: Order ID(It's the same ID in New order.)
-            :rate: Order rate ( Market order if null)
-            :pending_amount: Unsettle order amount
-            :pending_market_buy_amount: Unsettled order amount (only for spot market buy order)
-            :order_type: order type("sell" or "buy")
-            :stop_loss_rate: Stop Loss Order's Rate
-            :pair: Deal pair
-            :created_at: Order date
+            :id Order ID(It's the same ID in New order.)
+            :rate Order rate ( Market order if null)
+            :pending_amount Unsettle order amount
+            :pending_market_buy_amount Unsettled order amount (only for spot market buy order)
+            :order_type order type("sell" or "buy")
+            :stop_loss_rate Stop Loss Order's Rate
+            :pair Deal pair
+            :created_at Order date
         """
         method_name = "get_unsettled_order_list"
         self.log_message(method_name, f"Fetching Unsettled order list")
-
         return self.private_request(method_name)
+
+    def delet_cancel_order(self, id):
+        """
+        Cancel Order
+        New Order, Or you can cancel by specifying unsettle order list's ID.
+
+        Parameters:
+            :id New order or Unsettle order list's ID
+        Return:
+            :id Canceled order ID
+        """
+        method_name = "delet_cancel_order"
+        self.log_message(method_name, f"Delet New Order or nsettle order id: {id}")
+        return self.private_request(method_name, id=id)
+
+    def get_order_cancellation_status(self, id):
+        """
+        Order cancellation status
+        You can refer to the cancellation processing status of the order.
+
+        Parameters:
+            :id New order or Unsettle order list's ID
+        Return:
+            :id Canceled order ID
+            :cancel Canceled
+            :created_at Ordered time
+        """
+        method_name = "get_order_cancellation_status"
+        self.log_message(method_name, f"Fetching Order cancellation status id: {id}")
+        return self.private_request(method_name, id=id)

@@ -32,3 +32,9 @@ class TestCoincheckClient(SimpleTestCase):
 
         result = coincheck_client.get_unsettled_order_list()
         self.assertNotIn("error", result)
+
+        result = coincheck_client.delet_cancel_order("01")
+        self.assertTrue("error", result)
+
+        result = coincheck_client.get_order_cancellation_status("01")
+        self.assertTrue("error", result)

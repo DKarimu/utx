@@ -33,8 +33,8 @@ coincheck = BrokerConfig(
         "get_accounts_balance": "/api/accounts/balance",
         "post_new_order": "/api/exchange/orders",
         "get_unsettled_order_list": "/api/exchange/orders/opens",
-        "exchange_orders_id": "/api/exchange/orders/",  # /api/exchange/orders/[id]
-        "exchange_orders_cancel_status": "/api/exchange/orders/cancel_status?id=",  # /api/exchange/orders/cancel_status?id=[id]
+        "delet_cancel_order": "/api/exchange/orders/{}",  # /api/exchange/orders/[id]
+        "get_order_cancellation_status": "/api/exchange/orders/cancel_status",  # /api/exchange/orders/cancel_status?id=[id]
         "exchange_orders_transactions": "/api/exchange/orders/transactions",
         "exchange_orders_transactions_pagination": "/api/exchange/orders/transactions_pagination",
         "send_money": "/api/send_money",
