@@ -41,10 +41,16 @@ LOGGING = {
             "backupCount": 7,  # Keep up to 7 days of logs
             "formatter": "verbose",
         },
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+            "formatter": "verbose",
+        },
     },
     "loggers": {
         "django": {
-            "handlers": ["file", "debug_file"],
+            "handlers": ["debug_file", "console"],
+            # "handlers": ["file", "debug_file"],
             "level": "INFO",  # Adjust the log level as needed
             "propagate": True,
         },

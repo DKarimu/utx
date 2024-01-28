@@ -19,8 +19,8 @@ class BrokerConfig:
 
 # Define instances for broker1 and broker2
 coincheck = BrokerConfig(
-    access_key="S3sSX8yINaFMry9l",
-    secret_access_key="XjwMvdpQT8_QJWyJEXNYyLir6YzeI1j",
+    access_key="",
+    secret_access_key="",
     base_url="https://coincheck.com",
     api_urls={
         "get_ticker": "/api/ticker",
@@ -32,7 +32,7 @@ coincheck = BrokerConfig(
         "get_accounts_ticker": "/api/accounts/ticker",
         "get_accounts_balance": "/api/accounts/balance",
         "post_new_order": "/api/exchange/orders",
-        "exchange_orders_opens": "/api/exchange/orders/opens",
+        "get_unsettled_order_list": "/api/exchange/orders/opens",
         "exchange_orders_id": "/api/exchange/orders/",  # /api/exchange/orders/[id]
         "exchange_orders_cancel_status": "/api/exchange/orders/cancel_status?id=",  # /api/exchange/orders/cancel_status?id=[id]
         "exchange_orders_transactions": "/api/exchange/orders/transactions",

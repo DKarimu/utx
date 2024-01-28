@@ -39,12 +39,16 @@ class CoincheckClient:
             if "{}" in request_endpoint
             else request_endpoint
         )
-
         pair_parameter = f"pair={pair}" if pair else ""
         parameters = (
-            f"?{pair_parameter}&{urlencode(kwargs)}" if kwargs else f"?{pair_parameter}"
+            (
+                f"?{pair_parameter}&{urlencode(kwargs)}"
+                if kwargs
+                else f"?{pair_parameter}"
+            )
+            if pair_parameter
+            else ""
         )
-
         return f"{coincheck.base_url}{formatted_endpoint}{parameters}"
 
     def handle_request_error(
@@ -79,12 +83,10 @@ class CoincheckClient:
                 f"Request successful {response} data[{len(response.json())}]",
             )
             return response.json()
-
         except requests.exceptions.HTTPError as http_err:
             return self.handle_request_error(
                 http_err, response.status_code, method_name, response.text
             )
-
         except requests.exceptions.RequestException as req_err:
             return self.handle_request_error(req_err, method_name=method_name)
 
@@ -103,7 +105,6 @@ class CoincheckClient:
         try:
             request_url = self.construct_request_url(request, **kwargs)
             headers = self.create_header(request_url)
-
             # Choose the appropriate HTTP method
             if "get" in request:
                 response = requests.get(request_url, headers=headers)
@@ -115,7 +116,6 @@ class CoincheckClient:
                 raise ValueError(
                     "Invalid HTTP method. Supported methods: GET, POST, DELETE"
                 )
-
             response.raise_for_status()  # Raises HTTPError for bad responses
             self.log_message(
                 method_name,
@@ -195,7 +195,7 @@ class CoincheckClient:
         self.log_message(method_name, "Fetching Order Book")
         return self.public_request(method_name)
 
-    def get_calc_rate(self, pair, order_type, amount=None, price=None):
+    def get_calc_rate(self, pair, order_type, amount="", price=""):
         """
         Calc Rate
         Calculate the rate from the order of the exchange.
@@ -243,9 +243,9 @@ class CoincheckClient:
         order_type,
         rate,
         amount,
-        market_buy_amount=None,
-        stop_loss_rate=None,
-        time_in_force=None,
+        market_buy_amount="",
+        stop_loss_rate="",
+        time_in_force="",
     ):
         """
         New order
@@ -273,9 +273,27 @@ class CoincheckClient:
             "stop_loss_rate": stop_loss_rate,
             "time_in_force": time_in_force,
         }
-
         self.log_message(
             method_name, f"Placing new order for pair: {pair} Parameters {payload}"
         )
-
         return self.private_request(method_name, **payload)
+
+    def get_unsettled_order_list(self):
+        """
+        Unsettled order list
+        You can get a unsettled order list.
+
+        Returns:
+            :id: Order ID(It's the same ID in New order.)
+            :rate: Order rate ( Market order if null)
+            :pending_amount: Unsettle order amount
+            :pending_market_buy_amount: Unsettled order amount (only for spot market buy order)
+            :order_type: order type("sell" or "buy")
+            :stop_loss_rate: Stop Loss Order's Rate
+            :pair: Deal pair
+            :created_at: Order date
+        """
+        method_name = "get_unsettled_order_list"
+        self.log_message(method_name, f"Fetching Unsettled order list")
+
+        return self.private_request(method_name)
