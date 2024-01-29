@@ -23,26 +23,32 @@ coincheck = BrokerConfig(
     secret_access_key="",
     base_url="https://coincheck.com",
     api_urls={
+        # Public API
         "get_ticker": "/api/ticker",
         "get_trades": "/api/trades",
         "get_orderbooks": "/api/order_books",
         "get_calc_rate": "/api/exchange/orders/rate",
-        "get_standard_rate": "/api/rate/{}",  # /api/rate/[pair]
+        "get_standard_rate": "/api/rate/{}",
         "get_accounts": "/api/accounts",
         "get_accounts_ticker": "/api/accounts/ticker",
         "get_accounts_balance": "/api/accounts/balance",
+        # Private API
         "post_new_order": "/api/exchange/orders",
         "get_unsettled_order_list": "/api/exchange/orders/opens",
-        "delet_cancel_order": "/api/exchange/orders/{}",  # /api/exchange/orders/[id]
-        "get_order_cancellation_status": "/api/exchange/orders/cancel_status",  # /api/exchange/orders/cancel_status?id=[id]
-        "exchange_orders_transactions": "/api/exchange/orders/transactions",
-        "exchange_orders_transactions_pagination": "/api/exchange/orders/transactions_pagination",
-        "send_money": "/api/send_money",
-        "deposit_money": "/api/deposit_money",
-        "bank_accounts": "/api/bank_accounts",
-        "remove_bank_account": "/api/bank_accounts/",  # /api/bank_accounts/[id]
-        "withdraws": "/api/withdraws",
-        "cancel_withdrawal_request": "/api/withdraws/",  # /api/withdraws/[id]
+        "delet_cancel_order": "/api/exchange/orders/{}",
+        "get_order_cancellation_status": "/api/exchange/orders/cancel_status",
+        "get_transaction_history": "/api/exchange/orders/transactions",
+        "get_transaction_history_pagination": "/api/exchange/orders/transactions_pagination",
+        # Balance
+        "get_balance": "/api/accounts/balance",
+        "get_send_crypto_currency": "/api/send_money",
+        "get_send_crypto_history": "/api/send_money",
+        "get_deposits_istory": "/api/deposit_money",
+        "get_account_information": "/api/accounts",
+        "get_bank_account_list": "/api/bank_accounts",
+        "delet_bank_account": "/api/bank_accounts/{}",
+        "get_withdraw_history": "/api/withdraws",
+        "post_create_withdraw": "/api/withdraws",
     },
 )
 broker1_config = BrokerConfig(

@@ -7,6 +7,7 @@ import requests
 import logging
 
 from urllib.parse import urlencode
+from UtxLogger import UtxLogger
 from config.broker_config import coincheck
 
 
@@ -21,9 +22,7 @@ class CoincheckClient:
         api_config = coincheck
         self.api_key = api_config.api_key
         self.secret_key = api_config.secret_key
-
-        # Set up a logger for the class
-        self.log = logging.getLogger("django." + self.__class__.__name__)
+        self.log = UtxLogger(self.__class__.__name__)
 
     def construct_request_url(self, request, pair=None, id=None, **kwargs):
         request_endpoint = coincheck.api_urls.get(request)
@@ -50,44 +49,23 @@ class CoincheckClient:
         )
         return f"{coincheck.base_url}{formatted_endpoint}{parameters}"
 
-    def handle_request_error(
-        self, error, status_code=None, method_name=None, response_text=None
-    ):
-        error_msg = (
-            f"{error}, Status code: {status_code}, Response text: {response_text}"
-            if status_code
-            else str(error)
-        )
-        log_params = {
-            "class_name": self.__class__.__name__,
-            "method_name": method_name or "unknown_method",
-        }
-        self.log.error(error_msg, extra=log_params)
-        return {"error": error_msg}
-
-    def log_message(self, method_name, msg):
-        self.log.info(
-            msg,
-            extra={"class_name": self.__class__.__name__, "method_name": method_name},
-        )
-
     def public_request(self, request, **kwargs):
         method_name = "public_request"
         try:
             request_url = self.construct_request_url(request, **kwargs)
             response = requests.get(request_url)
             response.raise_for_status()  # Raises HTTPError for bad responses
-            self.log_message(
+            self.log.info(
                 method_name,
-                f"Request successful {response} data[{len(response.json())}]",
+                f"Request successful {response} data[{response.json()}]",
             )
             return response.json()
         except requests.exceptions.HTTPError as http_err:
-            return self.handle_request_error(
+            return self.log.handle_request_error(
                 http_err, response.status_code, method_name, response.text
             )
         except requests.exceptions.RequestException as req_err:
-            return self.handle_request_error(req_err, method_name=method_name)
+            return self.log.handle_request_error(req_err, method_name=method_name)
 
     def private_request(self, request, **kwargs):
         """
@@ -116,19 +94,19 @@ class CoincheckClient:
                     "Invalid HTTP method. Supported methods: GET, POST, DELETE"
                 )
             response.raise_for_status()  # Raises HTTPError for bad responses
-            self.log_message(
+            self.log.info(
                 method_name,
-                f"Request successful {response} data[{len(response.json())}]",
+                f"Request successful {response} data[{response.json()}]",
             )
             return response.json()
 
         except requests.exceptions.HTTPError as http_err:
-            return self.handle_request_error(
+            return self.log.handle_request_error(
                 http_err, response.status_code, method_name, response.text
             )
 
         except requests.exceptions.RequestException as req_err:
-            return self.handle_request_error(req_err, method_name=method_name)
+            return self.log.handle_request_error(req_err, method_name=method_name)
 
     def create_header(self, url):
         nonce = str(round(time.time() * 1000000))  # Nonce must be incremented
@@ -161,11 +139,11 @@ class CoincheckClient:
 
         Parameters:
             :param pair Pair (e.g., "btc_jpy")
-        Returns:
+        Return:
             :Result of the Ticker request.
         """
         method_name = "get_ticker"
-        self.log_message(method_name, f"Fetching Ticker for pair: {pair}")
+        self.log.info(method_name, f"Fetching Ticker for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
     def get_trades(self, pair="btc_jpy"):
@@ -176,11 +154,11 @@ class CoincheckClient:
 
         Parameters:
             :param pair Pair (e.g., "btc_jpy")
-        Returns:
+        Return:
             :Result of the Public trades request.
         """
         method_name = "get_trades"
-        self.log_message(method_name, f"Fetching Public trades for pair: {pair}")
+        self.log.info(method_name, f"Fetching Public trades for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
     def get_orderbooks(self):
@@ -193,7 +171,7 @@ class CoincheckClient:
             :bids Buy order status
         """
         method_name = "get_orderbooks"
-        self.log_message(method_name, "Fetching Order Book")
+        self.log.info(method_name, "Fetching Order Book")
         return self.public_request(method_name)
 
     def get_calc_rate(self, pair, order_type, amount="", price=""):
@@ -213,7 +191,7 @@ class CoincheckClient:
             :amount Order amount
         """
         method_name = "get_calc_rate"
-        self.log_message(
+        self.log.info(
             method_name,
             f"Fetching Calc Rate for pair: {pair}, order_type: {order_type}, amount: {amount},price: {price}",
         )
@@ -231,11 +209,11 @@ class CoincheckClient:
 
         Parameters:
             :pair Pair (e.g., "btc_jpy").
-        Returns:
+        Return:
             :rate
         """
         method_name = "get_standard_rate"
-        self.log_message(method_name, f"Fetching Standard Rate for pair: {pair}")
+        self.log.info(method_name, f"Fetching Standard Rate for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
     # Private API
@@ -266,7 +244,6 @@ class CoincheckClient:
             :Result of the new order request.
         """
         method_name = "post_new_order"
-        # Build the request payload
         payload = {
             "pair": pair,
             "order_type": order_type,
@@ -276,9 +253,7 @@ class CoincheckClient:
             "stop_loss_rate": stop_loss_rate,
             "time_in_force": time_in_force,
         }
-        self.log_message(
-            method_name, f"Placing new order for pair: {pair} Parameters {payload}"
-        )
+        self.log.info(method_name, f"Placing new order for Parameters {payload}")
         return self.private_request(method_name, **payload)
 
     def get_unsettled_order_list(self):
@@ -297,7 +272,7 @@ class CoincheckClient:
             :created_at Order date
         """
         method_name = "get_unsettled_order_list"
-        self.log_message(method_name, f"Fetching Unsettled order list")
+        self.log.info(method_name, f"Fetching Unsettled order list")
         return self.private_request(method_name)
 
     def delet_cancel_order(self, id):
@@ -311,7 +286,7 @@ class CoincheckClient:
             :id Canceled order ID
         """
         method_name = "delet_cancel_order"
-        self.log_message(method_name, f"Delet New Order or nsettle order id: {id}")
+        self.log.info(method_name, f"Delet New Order or nsettle order id: {id}")
         return self.private_request(method_name, id=id)
 
     def get_order_cancellation_status(self, id):
@@ -321,11 +296,249 @@ class CoincheckClient:
 
         Parameters:
             :id New order or Unsettle order list's ID
-        Return:
+        Returns:
             :id Canceled order ID
             :cancel Canceled
             :created_at Ordered time
         """
         method_name = "get_order_cancellation_status"
-        self.log_message(method_name, f"Fetching Order cancellation status id: {id}")
+        self.log.info(method_name, f"Fetching Order cancellation status id: {id}")
         return self.private_request(method_name, id=id)
+
+    def get_transaction_history(self):
+        """
+        Transaction history
+        Display your transaction history
+
+        Returns:
+            :id ID
+            :order_id Order ID
+            :created_at Ordered time
+            :funds Each fund balance's increase and decrease
+            :pair Pair
+            :rate Rate
+            :fee_currency Fee currency
+            :fee Fee amount
+            :liquidity "T" ( Taker ) or "M" ( Maker )
+            :side "sell" or "buy"
+        """
+        method_name = "get_transaction_history"
+        self.log.info(method_name, f"Fetching Transaction history")
+        return self.private_request(method_name)
+
+    def get_transaction_history_pagination(self):
+        """
+        Transaction history (Pagination)
+        Display your transaction history
+
+        Returns:
+            :id ID
+            :order_id Order ID
+            :created_at Ordered time
+            :funds Each fund balance's increase and decrease
+            :pair Pair
+            :rate Rate
+            :fee_currency Fee currency
+            :fee Fee amount
+            :liquidity "T" ( Taker ) or "M" ( Maker )
+            :side "sell" or "buy"
+        """
+        method_name = "get_transaction_history_pagination"
+        self.log.info(method_name, f"Fetching Transaction history (Pagination)")
+        return self.private_request(method_name)
+
+    # Account
+    # You can get balance and various information.
+    def get_balance(self):
+        """
+        Balance
+        Check your account balance.
+
+        Returns:
+            :jpy Balance for JPY
+            :btc Balance for BTC
+            :jpy_reserved Amount of JPY for unsettled buying order
+            :btc_reserved Amount of BTC for unsettled selling order
+            :jpy_lend_in_use JPY amount you are applying for lending (We don't allow you to loan JPY.)
+            :btc_lend_in_use BTC Amount you are applying for lending (We don't allow you to loan BTC.)
+            :jpy_lent JPY lending amount (Currently, we don't allow you to loan JPY.)
+            :btc_lent BTC lending amount (Currently, we don't allow you to loan BTC.)
+            :jpy_debt JPY borrowing amount
+            :btc_debt BTC borrowing amount
+            :jpy_tsumitate JPY reserving amount
+            :btc_tsumitate BTC reserving amount
+        """
+        method_name = "get_balance"
+        self.log.info(method_name, f"Fetching Balance")
+        return self.private_request(method_name)
+
+    def get_send_crypto_currency(
+        self, remittee_list_id, amount, purpose_type, purpose_details
+    ):
+        """
+        Send Crypto Currency
+        Sending Crypto Currency to specified address
+
+        Parameters:
+            :remittee_list_id RemitteeList Id sending to
+            :amount Amount
+            :purpose_type Purpose Type
+            :purpose_details Purpose Details
+
+        Returns:
+            :remittee_list_id RemitteeList Id sending to
+            :amount Amount
+            :purpose_details
+                :specific_items_of_goods Specific Items of Goods
+                :place_of_origin Place of Origin
+                :place_of_loading Place of Loading
+            ...
+        """
+        method_name = "get_send_crypto_currency"
+        payload = {
+            "remittee_list_id": remittee_list_id,
+            "amount": amount,
+            "purpose_type": purpose_type,
+            "purpose_details": purpose_details,
+        }
+        self.log.info(
+            method_name, f"Fetching Send Crypto Currency for Parameters {payload}"
+        )
+        return self.private_request(method_name, **payload)
+
+    def get_send_crypto_history(self, pair):
+        """
+        Sending History
+        BTC Sending history
+
+        Parameters:
+            :currency Currency(Only BTC)
+        Returns:
+            :id Send
+            :amount Amount of bitcoins sent
+            :fee Fee
+            :currency Currency
+            :address Recipient's bitcoin address
+            :created_at Date you sent
+            ...
+        """
+        method_name = "get_send_crypto_history"
+        self.log.info(method_name, f"Fetching Sending History for {pair}")
+        return self.private_request(method_name, pair)
+
+    def get_deposits_istory(self, pair):
+        """
+        Deposits History
+        BTC deposit history
+
+        Parameter:
+            :currency Currency(BTC now)
+        Returns:
+            :id Send
+            :amount Amount of bitcoins sent
+            :currency Currency
+            :address Recipient's bitcoin address
+            :status Status
+            :confirmed_at Date Confirmed
+            :created_at Date when receiving process started
+        """
+        method_name = "get_deposits_istory"
+        self.log.info(method_name, f"Fetching Deposits History for {pair}")
+        return self.private_request(method_name, pair)
+
+    def get_account_information(self):
+        """
+        Account information
+        Display account information.
+
+        Returns:
+            :id Send
+            :email Registered e-mail
+            :identity_status Your identity status.
+            :bitcoin_address Your bitcoin address for deposit
+            :taker_fee It displays the fee rate (%) in the case of performing the order as Taker.(BTC_JPY)
+            :maker_fee It displays the fee rate (%) in the case of performing the order as Maker.(BTC_JPY)
+            :exchange_fees It displays the fee for each order book.
+        """
+        method_name = "get_account_information"
+        self.log.info(method_name, f"Fetching Deposits History")
+        return self.private_request(method_name)
+
+    # Withdraw JPY
+    # You can withdraw JPY through this API.
+    def get_bank_account_list(self):
+        """
+        Bank account list
+        Display list of bank account you registered (withdrawal).
+
+        Returns:
+            :id Send
+            :bank_name Bank name
+            :branch_name Branch name
+            :bank_account_type Type of bank account
+            :number Bank account number
+            :mname Bank account name
+        """
+        method_name = "get_bank_account_list"
+        self.log.info(method_name, f"Fetching Bank account list")
+        return self.private_request(method_name)
+
+    def delet_bank_account(self, id):
+        """
+        Remove bank account
+        Will remove your bank account.
+
+        Parameters:
+            :id Bank account list iD
+        Return:
+            :success Removing bank account success
+        """
+        method_name = "delet_bank_account"
+        self.log.info(method_name, f"Remove bank account with id: {id}")
+        return self.private_request(method_name, id)
+
+    def get_withdraw_history(self):
+        """
+        Withdraw history
+        Display Japanese YEN withdrawal request history.
+
+        Returns:
+            :id Send
+            :status Withdraw status (pending, processing, finished, canceled)
+            :amount Amount
+            :currency Currency
+            :created_at Date you created
+            :bank_account_id Bank account ID
+            :fee Fee
+            :is_fast Fast withdraw option. Currently stopped.
+        """
+        method_name = "get_withdraw_history"
+        self.log.info(method_name, f"Fetching Withdraw history")
+        return self.private_request(method_name)
+
+    def post_create_withdraw(self, bank_account_id, amount, currency):
+        """
+        Create withdraw
+        Request Japanese Yen withdrawal
+
+        Parameters:
+            :bank_account_id Bank account ID
+            :amount Amount
+            :currency Currency ( only "JPY" )
+        Returns:
+            :id Send
+            :status Withdraw status (pending, processing, finished, canceled)
+            :amount Amount
+            :currency Currency
+            :created_at Date you created
+            :bank_account_id Bank account ID
+            :fee Fee
+        """
+        method_name = "post_create_withdraw"
+        payload = {
+            "bank_account_id": bank_account_id,
+            "amount": amount,
+            "currency": currency,
+        }
+        self.log.info(method_name, f"Fetching Create withdraw for Parameters{payload}")
+        return self.private_request(method_name, **payload)
