@@ -51,6 +51,8 @@ coincheck = BrokerConfig(
         "post_create_withdraw": "/api/withdraws",
     },
 )
+
+
 broker1_config = BrokerConfig(
     access_key="your_broker2_api_key",
     secret_access_key="your_broker2_secret_key",

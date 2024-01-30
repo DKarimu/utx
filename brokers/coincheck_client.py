@@ -7,7 +7,7 @@ import requests
 import logging
 
 from urllib.parse import urlencode
-from UtxLogger import UtxLogger
+from utx_logger import UtxLogger as log
 from config.broker_config import coincheck
 
 
@@ -22,7 +22,7 @@ class CoincheckClient:
         api_config = coincheck
         self.api_key = api_config.api_key
         self.secret_key = api_config.secret_key
-        self.log = UtxLogger(self.__class__.__name__)
+        self.log = log(self.__class__.__name__)
 
     def construct_request_url(self, request, pair=None, id=None, **kwargs):
         request_endpoint = coincheck.api_urls.get(request)
@@ -38,12 +38,11 @@ class CoincheckClient:
             if "{}" in request_endpoint and (pair or id)
             else request_endpoint
         )
-        if id:
-            param = f"id={id}"
-        else:
-            param = f"pair={pair}" if pair else ""
+        param = f"id={id}" if id else f"pair={pair}" if pair else ""
         parameters = (
-            (f"?{param}&{urlencode(kwargs)}" if kwargs else f"?{param}")
+            f"?{param}&{urlencode(kwargs)}"
+            if param and kwargs
+            else f"?{param}"
             if param
             else ""
         )

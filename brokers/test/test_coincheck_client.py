@@ -4,13 +4,13 @@
 
 import logging
 from django.test import SimpleTestCase
-from UtxLogger import UtxLogger
+from utx_logger import UtxLogger as log
 from brokers.coincheck_client import CoincheckClient
 
 
 class TestCoincheckClient(SimpleTestCase):
     def __int__(self):
-        self.log = UtxLogger("django." + self.__class__.__name__)
+        self.log = log(self.__class__.__name__)
 
     def test_ticker_returns_error(self):
         coincheck = CoincheckClient()
