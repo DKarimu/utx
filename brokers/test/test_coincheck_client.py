@@ -2,17 +2,15 @@
 # run test CMD
 # python manage.py test brokers.test.test_coincheck_client
 
-import logging
+
 from django.test import SimpleTestCase
 from utx_logger import UtxLogger as log
 from brokers.coincheck_client import CoincheckClient
 
 
 class TestCoincheckClient(SimpleTestCase):
-    def __int__(self):
-        self.log = log(self.__class__.__name__)
-
     def test_ticker_returns_error(self):
+        self.log = log(self.__class__.__name__)
         coincheck = CoincheckClient()
 
         # Test For Coincheck Public API
@@ -45,5 +43,38 @@ class TestCoincheckClient(SimpleTestCase):
         self.assertTrue("error", res)
 
         res = coincheck.get_transaction_history()
-        # self.log.info("", res)
+        self.assertTrue("error", res)
+
+        res = coincheck.get_transaction_history_pagination()
+        self.assertTrue("error", res)
+
+        res = coincheck.get_balance()
+        self.assertTrue("error", res)
+
+        purpose_details = {
+            "specific_items_of_goods": "食料品",
+            "place_of_origin": "カナダ",
+            "place_of_loading": "アメリカ",
+        }
+        res = coincheck.get_send_crypto_currency(
+            1069725, "0.000001", "payment_of_importing", purpose_details
+        )
+        self.assertTrue("error", res)
+
+        res = coincheck.get_send_crypto_history("btc_jpy")
+        self.assertTrue("error", res)
+
+        res = coincheck.get_deposits_istory("btc_jpy")
+        self.assertTrue("error", res)
+
+        res = coincheck.get_account_information()
+        self.assertTrue("error", res)
+
+        res = coincheck.get_bank_account_list()
+        self.assertTrue("error", res)
+
+        res = coincheck.get_withdraw_history()
+        self.assertTrue("error", res)
+
+        res = coincheck.post_create_withdraw(1069725, "10000.0", "JPY")
         self.assertTrue("error", res)

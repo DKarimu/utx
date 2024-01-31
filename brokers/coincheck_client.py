@@ -41,7 +41,7 @@ class CoincheckClient:
         param = f"id={id}" if id else f"pair={pair}" if pair else ""
         parameters = (
             f"?{param}&{urlencode(kwargs)}"
-            if param and kwargs
+            if param or kwargs
             else f"?{param}"
             if param
             else ""
@@ -56,7 +56,7 @@ class CoincheckClient:
             response.raise_for_status()  # Raises HTTPError for bad responses
             self.log.info(
                 method_name,
-                f"Request successful {response} data[{response.json()}]",
+                f"{request_url} Request successful {response} data[{len(response.json())}]",
             )
             return response.json()
         except requests.exceptions.HTTPError as http_err:
@@ -95,7 +95,7 @@ class CoincheckClient:
             response.raise_for_status()  # Raises HTTPError for bad responses
             self.log.info(
                 method_name,
-                f"Request successful {response} data[{response.json()}]",
+                f"{request_url} Request successful {response} data[{len(response.json())}]",
             )
             return response.json()
 
@@ -423,7 +423,7 @@ class CoincheckClient:
         """
         method_name = "get_send_crypto_history"
         self.log.info(method_name, f"Fetching Sending History for {pair}")
-        return self.private_request(method_name, pair)
+        return self.private_request(method_name, pair=pair)
 
     def get_deposits_istory(self, pair):
         """
@@ -443,7 +443,7 @@ class CoincheckClient:
         """
         method_name = "get_deposits_istory"
         self.log.info(method_name, f"Fetching Deposits History for {pair}")
-        return self.private_request(method_name, pair)
+        return self.private_request(method_name, pair=pair)
 
     def get_account_information(self):
         """
@@ -494,7 +494,7 @@ class CoincheckClient:
         """
         method_name = "delet_bank_account"
         self.log.info(method_name, f"Remove bank account with id: {id}")
-        return self.private_request(method_name, id)
+        return self.private_request(method_name, id=id)
 
     def get_withdraw_history(self):
         """
