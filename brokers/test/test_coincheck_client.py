@@ -1,16 +1,12 @@
 # test_coincheck_client.py
-# run test CMD
-# python manage.py test brokers.test.test_coincheck_client
-
 
 from django.test import SimpleTestCase
-from utx_logger import UtxLogger as log
+
 from brokers.coincheck_client import CoincheckClient
 
 
 class TestCoincheckClient(SimpleTestCase):
     def test_ticker_returns_error(self):
-        self.log = log(self.__class__.__name__)
         coincheck = CoincheckClient()
 
         # Test For Coincheck Public API

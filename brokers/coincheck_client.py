@@ -1,14 +1,15 @@
 # coincheck_client.py
 
-import time
-import hmac
 import hashlib
-import requests
-import logging
-
+import hmac
+import inspect
+import time
 from urllib.parse import urlencode
+
+import requests
 from utx_logger import UtxLogger as log
-from config.broker_config import coincheck
+
+from config.brokers_config import coincheck
 
 
 class CoincheckClient:
@@ -23,6 +24,9 @@ class CoincheckClient:
         self.api_key = api_config.api_key
         self.secret_key = api_config.secret_key
         self.log = log(self.__class__.__name__)
+
+    def get_method_name(self):
+        return inspect.currentframe().f_back.f_code.co_name
 
     def construct_request_url(self, request, pair=None, id=None, **kwargs):
         request_endpoint = coincheck.api_urls.get(request)
@@ -49,7 +53,7 @@ class CoincheckClient:
         return f"{coincheck.base_url}{formatted_endpoint}{parameters}"
 
     def public_request(self, request, **kwargs):
-        method_name = "public_request"
+        method_name = self.get_method_name()
         try:
             request_url = self.construct_request_url(request, **kwargs)
             response = requests.get(request_url)
@@ -77,7 +81,7 @@ class CoincheckClient:
         Returns:
         - Response from the API.
         """
-        method_name = "private_request"
+        method_name = self.get_method_name()
         try:
             request_url = self.construct_request_url(request, **kwargs)
             headers = self.create_header(request_url)
@@ -141,7 +145,7 @@ class CoincheckClient:
         Return:
             :Result of the Ticker request.
         """
-        method_name = "get_ticker"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Ticker for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
@@ -156,7 +160,7 @@ class CoincheckClient:
         Return:
             :Result of the Public trades request.
         """
-        method_name = "get_trades"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Public trades for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
@@ -169,7 +173,7 @@ class CoincheckClient:
             :asks Sell order status
             :bids Buy order status
         """
-        method_name = "get_orderbooks"
+        method_name = self.get_method_name()
         self.log.info(method_name, "Fetching Order Book")
         return self.public_request(method_name)
 
@@ -189,7 +193,7 @@ class CoincheckClient:
             :price Order price
             :amount Order amount
         """
-        method_name = "get_calc_rate"
+        method_name = self.get_method_name()
         self.log.info(
             method_name,
             f"Fetching Calc Rate for pair: {pair}, order_type: {order_type}, amount: {amount},price: {price}",
@@ -211,7 +215,7 @@ class CoincheckClient:
         Return:
             :rate
         """
-        method_name = "get_standard_rate"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Standard Rate for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
@@ -242,7 +246,7 @@ class CoincheckClient:
         Returns:
             :Result of the new order request.
         """
-        method_name = "post_new_order"
+        method_name = self.get_method_name()
         payload = {
             "pair": pair,
             "order_type": order_type,
@@ -270,7 +274,7 @@ class CoincheckClient:
             :pair Deal pair
             :created_at Order date
         """
-        method_name = "get_unsettled_order_list"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Unsettled order list")
         return self.private_request(method_name)
 
@@ -284,7 +288,7 @@ class CoincheckClient:
         Return:
             :id Canceled order ID
         """
-        method_name = "delet_cancel_order"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Delet New Order or nsettle order id: {id}")
         return self.private_request(method_name, id=id)
 
@@ -300,7 +304,7 @@ class CoincheckClient:
             :cancel Canceled
             :created_at Ordered time
         """
-        method_name = "get_order_cancellation_status"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Order cancellation status id: {id}")
         return self.private_request(method_name, id=id)
 
@@ -321,7 +325,7 @@ class CoincheckClient:
             :liquidity "T" ( Taker ) or "M" ( Maker )
             :side "sell" or "buy"
         """
-        method_name = "get_transaction_history"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Transaction history")
         return self.private_request(method_name)
 
@@ -342,7 +346,7 @@ class CoincheckClient:
             :liquidity "T" ( Taker ) or "M" ( Maker )
             :side "sell" or "buy"
         """
-        method_name = "get_transaction_history_pagination"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Transaction history (Pagination)")
         return self.private_request(method_name)
 
@@ -367,7 +371,7 @@ class CoincheckClient:
             :jpy_tsumitate JPY reserving amount
             :btc_tsumitate BTC reserving amount
         """
-        method_name = "get_balance"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Balance")
         return self.private_request(method_name)
 
@@ -393,7 +397,7 @@ class CoincheckClient:
                 :place_of_loading Place of Loading
             ...
         """
-        method_name = "get_send_crypto_currency"
+        method_name = self.get_method_name()
         payload = {
             "remittee_list_id": remittee_list_id,
             "amount": amount,
@@ -421,7 +425,7 @@ class CoincheckClient:
             :created_at Date you sent
             ...
         """
-        method_name = "get_send_crypto_history"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Sending History for {pair}")
         return self.private_request(method_name, pair=pair)
 
@@ -441,7 +445,7 @@ class CoincheckClient:
             :confirmed_at Date Confirmed
             :created_at Date when receiving process started
         """
-        method_name = "get_deposits_istory"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Deposits History for {pair}")
         return self.private_request(method_name, pair=pair)
 
@@ -459,7 +463,7 @@ class CoincheckClient:
             :maker_fee It displays the fee rate (%) in the case of performing the order as Maker.(BTC_JPY)
             :exchange_fees It displays the fee for each order book.
         """
-        method_name = "get_account_information"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Deposits History")
         return self.private_request(method_name)
 
@@ -478,7 +482,7 @@ class CoincheckClient:
             :number Bank account number
             :mname Bank account name
         """
-        method_name = "get_bank_account_list"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Bank account list")
         return self.private_request(method_name)
 
@@ -492,7 +496,7 @@ class CoincheckClient:
         Return:
             :success Removing bank account success
         """
-        method_name = "delet_bank_account"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Remove bank account with id: {id}")
         return self.private_request(method_name, id=id)
 
@@ -511,7 +515,7 @@ class CoincheckClient:
             :fee Fee
             :is_fast Fast withdraw option. Currently stopped.
         """
-        method_name = "get_withdraw_history"
+        method_name = self.get_method_name()
         self.log.info(method_name, f"Fetching Withdraw history")
         return self.private_request(method_name)
 
@@ -533,7 +537,7 @@ class CoincheckClient:
             :bank_account_id Bank account ID
             :fee Fee
         """
-        method_name = "post_create_withdraw"
+        method_name = self.get_method_name()
         payload = {
             "bank_account_id": bank_account_id,
             "amount": amount,

@@ -1,5 +1,5 @@
 # broker_config.py
-class BrokerConfig:
+class BrokersConfig:
     def __init__(
         self,
         access_key=None,
@@ -18,7 +18,7 @@ class BrokerConfig:
 
 
 # Define instances for broker1 and broker2
-coincheck = BrokerConfig(
+coincheck = BrokersConfig(
     access_key="",
     secret_access_key="",
     base_url="https://coincheck.com",
@@ -53,7 +53,7 @@ coincheck = BrokerConfig(
 )
 
 
-broker1_config = BrokerConfig(
+broker1_config = BrokersConfig(
     access_key="your_broker2_api_key",
     secret_access_key="your_broker2_secret_key",
     account_id="your_broker2_account_id",

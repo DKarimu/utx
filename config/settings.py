@@ -1,7 +1,7 @@
 # config/settings.py
 
-import os
 import logging
+import os
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
@@ -64,7 +64,7 @@ LOGGING = {
         "verbose": {
             "style": "{",
             "datefmt": "%Y-%m-%d %H:%M:%S",
-            "format": "{levelname} {asctime} {class_name}.{method_name}: {message}",
+            "format": "{levelname} {asctime}  {class_name}.{method_name}: {message}",
         },
     },
 }
