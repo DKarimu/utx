@@ -1,9 +1,11 @@
+# apps/data/models/market_data.py
+
 from datetime import datetime
 
 from django.db import models
 
 
-class MarketData(models.Model):
+class Market(models.Model):
     id = models.BigAutoField(primary_key=True)
     last = models.FloatField()
     bid = models.FloatField()
@@ -49,3 +51,6 @@ class MarketData(models.Model):
 
     def delete_market_data(self):
         self.delete()
+
+    class Meta:
+        app_label = "data"  # Explicitly set the app_label to 'data'

@@ -83,9 +83,8 @@ LOGGING = {
 INSTALLED_APPS = [
     "apps.brokers",
     "apps.config",
-    "apps.data",
+    "apps.data",  # Include the app name, not the model path
     "apps.strategies",
-    "apps.strategies.management",
     "apps.utils",
 ]
 

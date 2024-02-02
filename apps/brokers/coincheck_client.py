@@ -7,9 +7,8 @@ import time
 from urllib.parse import urlencode
 
 import requests
+from config.brokers_config import coincheck_cfg
 from utx_logger import UtxLogger as log
-
-from config.brokers_config import coincheck
 
 
 class CoincheckClient:
@@ -20,7 +19,7 @@ class CoincheckClient:
     """
 
     def __init__(self):
-        api_config = coincheck
+        api_config = coincheck_cfg
         self.api_key = api_config.api_key
         self.secret_key = api_config.secret_key
         self.log = log(self.__class__.__name__)
@@ -29,7 +28,7 @@ class CoincheckClient:
         return inspect.currentframe().f_back.f_code.co_name
 
     def construct_request_url(self, request, pair=None, id=None, **kwargs):
-        request_endpoint = coincheck.api_urls.get(request)
+        request_endpoint = coincheck_cfg.api_urls.get(request)
 
         if not request_endpoint:
             return ValueError(f"Invalid request: {request}")
@@ -50,7 +49,7 @@ class CoincheckClient:
             if param
             else ""
         )
-        return f"{coincheck.base_url}{formatted_endpoint}{parameters}"
+        return f"{coincheck_cfg.base_url}{formatted_endpoint}{parameters}"
 
     def public_request(self, request, **kwargs):
         method_name = self.get_method_name()

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from apps.data.models.market_data import MarketData
+from apps.data.models.market_data import Market
 
 
 class MarketDataTest(TestCase):
@@ -18,15 +18,15 @@ class MarketDataTest(TestCase):
             "timestamp": datetime.now().timestamp(),
         }
 
-        market_data_created = MarketData.create_market_data(data_to_create)
+        market_data_created = Market.create_market_data(data_to_create)
         self.assertIsNotNone(market_data_created.id)
 
         # Read all
-        all_market_data = MarketData.read_all_market_data()
+        all_market_data = Market.read_all_market_data()
         self.assertTrue(all_market_data.exists())
 
         # Read by ID
-        market_data_by_id = MarketData.read_market_data_by_id(market_data_created.id)
+        market_data_by_id = Market.read_market_data_by_id(market_data_created.id)
         self.assertEqual(market_data_by_id, market_data_created)
 
         # Update
@@ -41,9 +41,7 @@ class MarketDataTest(TestCase):
         }
 
         market_data_created.update_market_data(updated_data)
-        market_data_after_update = MarketData.read_market_data_by_id(
-            market_data_created.id
-        )
+        market_data_after_update = Market.read_market_data_by_id(market_data_created.id)
 
         self.assertEqual(market_data_after_update.last, updated_data["last"])
         self.assertEqual(market_data_after_update.bid, updated_data["bid"])
@@ -51,4 +49,4 @@ class MarketDataTest(TestCase):
 
         # Delete
         market_data_created.delete_market_data()
-        self.assertFalse(MarketData.read_all_market_data().exists())
+        self.assertFalse(Market.read_all_market_data().exists())

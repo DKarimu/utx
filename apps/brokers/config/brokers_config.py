@@ -18,7 +18,7 @@ class BrokersConfig:
 
 
 # Define instances for broker1 and broker2
-coincheck = BrokersConfig(
+coincheck_cfg = BrokersConfig(
     access_key="",
     secret_access_key="",
     base_url="https://coincheck.com",
