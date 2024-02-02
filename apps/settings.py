@@ -84,8 +84,8 @@ INSTALLED_APPS = [
     "apps.brokers",
     "apps.config",
     "apps.data",
-    "apps.management",
     "apps.strategies",
+    "apps.strategies.management",
     "apps.utils",
 ]
 
