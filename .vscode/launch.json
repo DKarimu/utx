@@ -10,13 +10,28 @@
             "justMyCode": true
         },
         {
-            "name": "Python: Debug Brokers Tests",
+            "name": "Python: Debug Brokers Test",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "args": [
                 "test",
-                "brokers/test"
+                "apps/brokers/test"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "DJANGO_DEBUG_LOG": "true"
+            }
+        },
+        {
+            "name": "Python: Debug Models Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+                "test",
+                "apps/data/test"
             ],
             "console": "integratedTerminal",
             "justMyCode": true,

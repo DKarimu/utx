@@ -2,7 +2,7 @@
 
 from django.test import SimpleTestCase
 
-from brokers.coincheck_client import CoincheckClient
+from apps.brokers.coincheck_client import CoincheckClient
 
 
 class TestCoincheckClient(SimpleTestCase):

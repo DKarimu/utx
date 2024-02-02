@@ -24,7 +24,7 @@ services:
       - DJANGO_DB_NAME=utx_database
       - DJANGO_DB_USER=utx_user
       - DJANGO_DB_PASSWORD=utx_password
-      - DJANGO_SETTINGS_MODULE=config.settings
+      - DJANGO_SETTINGS_MODULE=apps.settings
       - DJANGO_DEBUG_LOG=true
 
   ### PostgreSQL Database 

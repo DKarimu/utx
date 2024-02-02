@@ -3,7 +3,6 @@
 import logging
 import os
 from datetime import datetime
-from logging.handlers import TimedRotatingFileHandler
 
 try:
     from .settings_local import *
@@ -14,8 +13,20 @@ SECRET_KEY = "utx_secret_key"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
+# Database
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DJANGO_DB_NAME", "default_database"),
+        "USER": os.getenv("DJANGO_DB_USER", "default_user"),
+        "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", "default_password"),
+        "HOST": os.getenv("DJANGO_DB_HOST", "localhost"),
+        "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
+    }
+}
+
 # Set the log directory path
-log_dir = os.path.join("data", "logs")
+log_dir = os.path.join("", "logs")
 
 LOGGING = {
     "version": 1,
@@ -57,7 +68,7 @@ LOGGING = {
         "django.db.backends": {
             "handlers": ["file"],
             "level": "DEBUG",
-            "propagate": False,
+            "propagate": True,
         },
     },
     "formatters": {
@@ -68,3 +79,30 @@ LOGGING = {
         },
     },
 }
+
+INSTALLED_APPS = [
+    "apps.brokers",
+    "apps.config",
+    "apps.data",
+    "apps.management",
+    "apps.strategies",
+    "apps.utils",
+]
+
+
+class ClassNameFilter(logging.Filter):
+    def filter(self, record):
+        record.class_name = record.name
+        record.method_name = record.funcName
+        return True
+
+
+LOGGING["filters"] = {
+    "class_name_filter": {
+        "()": ClassNameFilter,
+    },
+}
+
+LOGGING["handlers"]["file"]["filters"] = ["class_name_filter"]
+LOGGING["handlers"]["debug_file"]["filters"] = ["class_name_filter"]
+LOGGING["handlers"]["console"]["filters"] = ["class_name_filter"]
