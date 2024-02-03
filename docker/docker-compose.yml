@@ -26,6 +26,7 @@ services:
       - DJANGO_DB_PASSWORD=utx_password
       - DJANGO_SETTINGS_MODULE=apps.settings
       - DJANGO_DEBUG_LOG=true
+      - UTX_DATA_MODELS=./apps/data/models
 
   ### PostgreSQL Database 
   postgres:

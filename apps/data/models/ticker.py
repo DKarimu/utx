@@ -1,11 +1,10 @@
-# apps/data/models/market_data.py
-
+# /app/apps/data/models/ticker.py
 from datetime import datetime
 
-from django.db import models
+from django.db import connection, models
 
 
-class Market(models.Model):
+class Ticker(models.Model):
     id = models.BigAutoField(primary_key=True)
     last = models.FloatField()
     bid = models.FloatField()
@@ -16,10 +15,10 @@ class Market(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return f"MarketData - {self.timestamp}"
+        return f"Ticker - {self.timestamp}"
 
     @classmethod
-    def create_market_data(cls, data):
+    def create_ticker_data(cls, data):
         timestamp = datetime.fromtimestamp(data["timestamp"])
         return cls.objects.create(
             last=data["last"],
@@ -32,14 +31,14 @@ class Market(models.Model):
         )
 
     @classmethod
-    def read_all_market_data(cls):
+    def read_all_ticker_data(cls):
         return cls.objects.all()
 
     @classmethod
-    def read_market_data_by_id(cls, market_data_id):
-        return cls.objects.get(id=market_data_id)
+    def read_ticker_data_by_id(cls, ticker_data_id):
+        return cls.objects.get(id=ticker_data_id)
 
-    def update_market_data(self, data):
+    def update_ticker_data(self, data):
         self.last = data["last"]
         self.bid = data["bid"]
         self.ask = data["ask"]
@@ -49,7 +48,7 @@ class Market(models.Model):
         self.timestamp = datetime.fromtimestamp(data["timestamp"])
         self.save()
 
-    def delete_market_data(self):
+    def delete_ticker_data(self):
         self.delete()
 
     class Meta:
