@@ -1,11 +1,11 @@
 # /app/apps/data/models/ticker.py
 from datetime import datetime
 
-from django.db import connection, models
+from django.db import models
 
 
 class Ticker(models.Model):
-    id = models.BigAutoField(primary_key=True)
+    utx_id = models.BigAutoField(primary_key=True)
     last = models.FloatField()
     bid = models.FloatField()
     ask = models.FloatField()
@@ -15,7 +15,7 @@ class Ticker(models.Model):
     timestamp = models.DateTimeField()
 
     def __str__(self):
-        return f"Ticker - {self.timestamp}"
+        return f"Trade ID: {self.id},last: {self.last},bid: {self.bid},ask: {self.ask},high: {self.high},low: {self.low},volume: {self.volume},timestamp: {self.timestamp}"
 
     @classmethod
     def create_ticker_data(cls, data):
@@ -36,7 +36,7 @@ class Ticker(models.Model):
 
     @classmethod
     def read_ticker_data_by_id(cls, ticker_data_id):
-        return cls.objects.get(id=ticker_data_id)
+        return cls.objects.get(utx_id=ticker_data_id)
 
     def update_ticker_data(self, data):
         self.last = data["last"]

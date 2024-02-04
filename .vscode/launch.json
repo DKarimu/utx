@@ -2,21 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Debug",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "Python: Debug Brokers Test",
+            "name": "Python: Debug utx test",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "args": [
                 "test",
-                "apps/brokers/test"
+                "apps/tests"
             ],
             "console": "integratedTerminal",
             "justMyCode": true,
@@ -24,20 +16,5 @@
                 "DJANGO_DEBUG_LOG": "true"
             }
         },
-        {
-            "name": "Python: Debug Models Test",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/manage.py",
-            "args": [
-                "test",
-                "apps/data/test"
-            ],
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "env": {
-                "DJANGO_DEBUG_LOG": "true"
-            }
-        }
     ]
 }

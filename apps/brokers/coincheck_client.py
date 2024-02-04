@@ -7,7 +7,7 @@ import time
 from urllib.parse import urlencode
 
 import requests
-from config.brokers_config import coincheck_cfg
+from brokers_config import coincheck_cfg
 from utx_logger import UtxLogger as log
 
 
@@ -45,9 +45,7 @@ class CoincheckClient:
         parameters = (
             f"?{param}&{urlencode(kwargs)}"
             if param or kwargs
-            else f"?{param}"
-            if param
-            else ""
+            else f"?{param}" if param else ""
         )
         return f"{coincheck_cfg.base_url}{formatted_endpoint}{parameters}"
 
@@ -148,7 +146,7 @@ class CoincheckClient:
         self.log.info(method_name, f"Fetching Ticker for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
-    def get_trades(self, pair="btc_jpy"):
+    def get_public_trades(self, pair="btc_jpy"):
         """
         Public trades
         Get current order transactions for a specified pair.

@@ -13,7 +13,7 @@ class TestCoincheckClient(SimpleTestCase):
         res = coincheck.get_ticker("etc_jpy")
         self.assertNotIn("error", res)
 
-        res = coincheck.get_trades()
+        res = coincheck.get_public_trades()
         self.assertNotIn("error", res)
 
         res = coincheck.get_orderbooks()

@@ -82,10 +82,10 @@ LOGGING = {
 
 INSTALLED_APPS = [
     "apps.brokers",
-    "apps.config",
     "apps.data",
     "apps.strategies",
     "apps.utils",
+    "apps.tests",
 ]
 
 

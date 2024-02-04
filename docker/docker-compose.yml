@@ -17,6 +17,7 @@ services:
     volumes:
       - ../:/app
     container_name: utx
+    # command: bash -c "python manage.py batch_processing --sleeping_seconds=5"
     # command: bash -c "python /app/manage.py runserver 0.0.0.0:8080"
     environment:
       - DJANGO_DB_HOST=postgres

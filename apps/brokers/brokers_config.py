@@ -25,7 +25,7 @@ coincheck_cfg = BrokersConfig(
     api_urls={
         # Public API
         "get_ticker": "/api/ticker",
-        "get_trades": "/api/trades",
+        "get_public_trades": "/api/trades",
         "get_orderbooks": "/api/order_books",
         "get_calc_rate": "/api/exchange/orders/rate",
         "get_standard_rate": "/api/rate/{}",

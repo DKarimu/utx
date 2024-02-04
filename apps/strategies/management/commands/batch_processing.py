@@ -8,6 +8,7 @@ from argparse import ArgumentParser  # Import ArgumentParser
 from coincheck_client import CoincheckClient
 from django.core.management.base import BaseCommand
 from models.ticker import Ticker
+from models.trade import Trade
 from utx_db_service import UtxDBService
 from utx_logger import UtxLogger as log
 
@@ -40,6 +41,7 @@ class Command(BaseCommand):
         while self._running:
             try:
                 Ticker.create_ticker_data(coincheck.get_ticker())
+                Trade.create_trades_data(coincheck.get_public_trades())
                 self.stdout.write(
                     self.style.SUCCESS(
                         f"Batch processing completed. Sleeping for {sleeping_seconds} seconds..."

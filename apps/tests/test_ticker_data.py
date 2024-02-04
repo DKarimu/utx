@@ -18,14 +18,14 @@ class TestTicker(TestCase):
         }
 
         ticker_data_created = Ticker.create_ticker_data(data_to_create)
-        self.assertIsNotNone(ticker_data_created.id)
+        self.assertIsNotNone(ticker_data_created.utx_id)
 
         # Read all
         all_ticker_data = Ticker.read_all_ticker_data()
         self.assertTrue(all_ticker_data.exists())
 
         # Read by ID
-        ticker_data_by_id = Ticker.read_ticker_data_by_id(ticker_data_created.id)
+        ticker_data_by_id = Ticker.read_ticker_data_by_id(ticker_data_created.utx_id)
         self.assertEqual(ticker_data_by_id, ticker_data_created)
 
         # Update
@@ -40,7 +40,9 @@ class TestTicker(TestCase):
         }
 
         ticker_data_created.update_ticker_data(updated_data)
-        ticker_data_after_update = Ticker.read_ticker_data_by_id(ticker_data_created.id)
+        ticker_data_after_update = Ticker.read_ticker_data_by_id(
+            ticker_data_created.utx_id
+        )
 
         self.assertEqual(ticker_data_after_update.last, updated_data["last"])
         self.assertEqual(ticker_data_after_update.bid, updated_data["bid"])
