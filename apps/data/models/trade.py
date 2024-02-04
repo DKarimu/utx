@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.utils.dateparse import parse_datetime
 
@@ -10,9 +12,20 @@ class Trade(models.Model):
     pair = models.CharField(max_length=20)
     order_type = models.CharField(max_length=10)
     created_at = models.DateTimeField()
+    utx_create_time = models.DateTimeField()
 
     def __str__(self):
-        return f"Trade ID: {self.utx_id}, Trade_id: {self.id},Amount: {self.amount}, Rate: {self.rate}, Pair: {self.pair}, Order Type: {self.order_type}, Created At: {self.created_at}"
+        ticker_dict = {
+            "Trade ID": self.utx_id,
+            "last": self.id,
+            "bid": self.amount,
+            "ask": self.rate,
+            "high": self.pair,
+            "low": self.order_type,
+            "volume": self.created_at,
+            "timestamp": self.utx_create_time,
+        }
+        return str(ticker_dict)
 
     @classmethod
     def create_trade_data(cls, data):
@@ -49,6 +62,13 @@ class Trade(models.Model):
         trades_data = public_trades.get("data", [])
         for trade_data in trades_data:
             Trade.create_trade_data(trade_data)
+
+    def save(self, *args, **kwargs):
+        # Check if utx_create_time is not set
+        if not self.utx_create_time:
+            current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
+            self.utx_create_time = datetime.strptime(current_time, "%Y%m%d%H%M%S.%f")
+        super(Trade, self).save(*args, **kwargs)
 
     class Meta:
         app_label = "data"  # Explicitly set the app_label to 'data'

@@ -28,6 +28,7 @@ services:
       - DJANGO_SETTINGS_MODULE=apps.settings
       - DJANGO_DEBUG_LOG=true
       - UTX_DATA_MODELS=./apps/data/models
+      - UTX_TIME_ZONE=Asia/Tokyo
 
   ### PostgreSQL Database 
   postgres:

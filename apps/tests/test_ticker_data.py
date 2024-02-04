@@ -14,7 +14,7 @@ class TestTicker(TestCase):
             "high": 105.0,
             "low": 97.8,
             "volume": 5000.0,
-            "timestamp": datetime.now().timestamp(),
+            "timestamp": 1644061482,
         }
 
         ticker_data_created = Ticker.create_ticker_data(data_to_create)
@@ -36,7 +36,7 @@ class TestTicker(TestCase):
             "high": 115.0,
             "low": 107.8,
             "volume": 6000.0,
-            "timestamp": datetime.now().timestamp(),
+            "timestamp": 1644061482,
         }
 
         ticker_data_created.update_ticker_data(updated_data)

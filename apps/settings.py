@@ -1,4 +1,4 @@
-# config/settings.py
+# apps/settings.py
 
 import logging
 import os
@@ -9,11 +9,12 @@ try:
 except ImportError:
     pass
 
-SECRET_KEY = "utx_secret_key"
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+SECRET_KEY = "utx_secret_key"
+TIME_ZONE = os.environ["UTX_TIME_ZONE"]
 
-# Database
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -25,9 +26,9 @@ DATABASES = {
     }
 }
 
+
 # Set the log directory path
 log_dir = os.path.join("", "logs")
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -79,6 +80,7 @@ LOGGING = {
         },
     },
 }
+
 
 INSTALLED_APPS = [
     "apps.brokers",

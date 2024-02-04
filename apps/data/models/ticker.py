@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from django.db import models
+from django.utils import timezone
 
 
 class Ticker(models.Model):
@@ -13,9 +14,20 @@ class Ticker(models.Model):
     low = models.FloatField()
     volume = models.FloatField()
     timestamp = models.DateTimeField()
+    utx_create_time = models.DateTimeField()
 
     def __str__(self):
-        return f"Trade ID: {self.id},last: {self.last},bid: {self.bid},ask: {self.ask},high: {self.high},low: {self.low},volume: {self.volume},timestamp: {self.timestamp}"
+        ticker_dict = {
+            "Trade ID": self.utx_id,
+            "last": self.last,
+            "bid": self.bid,
+            "ask": self.ask,
+            "high": self.high,
+            "low": self.low,
+            "volume": self.volume,
+            "timestamp": self.timestamp,
+        }
+        return str(ticker_dict)
 
     @classmethod
     def create_ticker_data(cls, data):
@@ -50,6 +62,13 @@ class Ticker(models.Model):
 
     def delete_ticker_data(self):
         self.delete()
+
+    def save(self, *args, **kwargs):
+        # Check if utx_create_time is not set
+        if not self.utx_create_time:
+            current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
+            self.utx_create_time = datetime.strptime(current_time, "%Y%m%d%H%M%S.%f")
+        super(Ticker, self).save(*args, **kwargs)
 
     class Meta:
         app_label = "data"  # Explicitly set the app_label to 'data'
