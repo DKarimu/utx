@@ -3,7 +3,7 @@ import logging
 
 class UtxLogger:
     def __init__(self, class_name):
-        self.log = logging.getLogger("django." + class_name)
+        self.log = logging.getLogger("django.utx." + class_name)
 
     def log_message(self, method_name, msg, level=logging.INFO):
         self.log.log(

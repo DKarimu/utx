@@ -33,7 +33,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {
-        "file": {
+        "utx_logs_fils": {
             "level": "DEBUG",
             "class": "logging.handlers.TimedRotatingFileHandler",
             "filename": os.path.join(
@@ -43,11 +43,11 @@ LOGGING = {
             "backupCount": 7,  # Keep up to 7 days of logs
             "formatter": "verbose",
         },
-        "debug_file": {
+        "utx_db_logs_fils": {
             "level": "DEBUG",
             "class": "logging.handlers.TimedRotatingFileHandler",
             "filename": os.path.join(
-                log_dir, "{:%Y%m%d}_dbg_utx.log".format(datetime.now())
+                log_dir, "{:%Y%m%d}_utx_db.log".format(datetime.now())
             ),
             "when": "midnight",
             "backupCount": 7,  # Keep up to 7 days of logs
@@ -61,13 +61,13 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["debug_file", "console"],
-            # "handlers": ["file", "debug_file"],
+            "handlers": ["utx_logs_fils", "console"],
+            # "handlers": ["utx_logs_fils", "utx_db_logs_fils"],
             "level": "INFO",  # Adjust the log level as needed
             "propagate": True,
         },
         "django.db.backends": {
-            "handlers": ["file"],
+            "handlers": ["utx_db_logs_fils", "console"],
             "level": "DEBUG",
             "propagate": True,
         },
@@ -76,7 +76,7 @@ LOGGING = {
         "verbose": {
             "style": "{",
             "datefmt": "%Y-%m-%d %H:%M:%S",
-            "format": "{levelname} {asctime}  {class_name}.{method_name}: {message}",
+            "format": "{levelname:<5} {asctime:<5} {class_name}.{method_name}: {message}",
         },
     },
 }
@@ -93,8 +93,9 @@ INSTALLED_APPS = [
 
 class ClassNameFilter(logging.Filter):
     def filter(self, record):
-        record.class_name = record.name
-        record.method_name = record.funcName
+        if not hasattr(record, "class_name"):
+            record.class_name = record.name
+            record.method_name = record.funcName
         return True
 
 
@@ -104,6 +105,6 @@ LOGGING["filters"] = {
     },
 }
 
-LOGGING["handlers"]["file"]["filters"] = ["class_name_filter"]
-LOGGING["handlers"]["debug_file"]["filters"] = ["class_name_filter"]
+LOGGING["handlers"]["utx_logs_fils"]["filters"] = ["class_name_filter"]
+LOGGING["handlers"]["utx_db_logs_fils"]["filters"] = ["class_name_filter"]
 LOGGING["handlers"]["console"]["filters"] = ["class_name_filter"]
