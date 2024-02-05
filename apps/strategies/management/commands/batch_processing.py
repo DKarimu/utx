@@ -1,12 +1,14 @@
 # /app/apps/strategies/management/commands/batch_processing.py
 # python manage.py batch_processing --sleeping_seconds=10
 
+import inspect
 import signal
 import time
 from argparse import ArgumentParser  # Import ArgumentParser
 
 from coincheck_client import CoincheckClient
 from django.core.management.base import BaseCommand
+from models.orderbook import OrderBook
 from models.ticker import Ticker
 from models.trade import Trade
 from utx_db_service import UtxDBService
@@ -29,6 +31,7 @@ class Command(BaseCommand):
         self._running = True
 
     def handle(self, *args, **options):
+        method_name = inspect.currentframe().f_back.f_code.co_name
         UtxDBService().create_models_tables()
         signal.signal(signal.SIGINT, self.handle_interrupt)
         self.stdout.write(self.style.SUCCESS("Successfully ran strategies."))
@@ -42,10 +45,11 @@ class Command(BaseCommand):
             try:
                 Ticker.create_ticker_data(coincheck.get_ticker())
                 Trade.create_trades_data(coincheck.get_public_trades())
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Batch processing completed. Sleeping for {sleeping_seconds} seconds..."
-                    )
+                res = coincheck.get_orderbooks()
+                OrderBook.create_order_book(res)
+                self.log.info(
+                    method_name,
+                    f"Batch processing completed. Sleeping for {sleeping_seconds} seconds...",
                 )
                 time.sleep(sleeping_seconds)
 
@@ -64,9 +68,9 @@ class Command(BaseCommand):
                     )
 
             except Exception as e:
-                self.stderr.write(
-                    self.style.ERROR(f"Error during batch processing: {str(e)}")
-                )
+                msg = f"Error during batch processing: {str(e)}"
+                self.stderr.write(self.style.ERROR(msg))
+                self.log.error(method_name, msg)
                 time.sleep(60)
 
     def handle_interrupt(self, signum, frame):

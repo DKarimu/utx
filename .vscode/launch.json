@@ -16,5 +16,21 @@
                 "DJANGO_DEBUG_LOG": "true"
             }
         },
+        {
+            "name": "Django: Batch Processing",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+              "batch_processing",
+              "--sleeping_seconds=10"
+            ],
+            "django": true,
+            "console": "integratedTerminal",
+            "env": {
+                "DJANGO_DEBUG_LOG": "true"
+            },
+            "cwd": "${workspaceFolder}"
+          }
     ]
 }
