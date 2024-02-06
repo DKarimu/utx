@@ -4,7 +4,7 @@ from django.test import TestCase
 from models.ticker import Ticker
 
 
-class TestTicker(TestCase):
+class TickerTest(TestCase):
     def test_ticker_data_operations(self):
         # Create
         data_to_create = {

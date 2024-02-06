@@ -8,6 +8,8 @@ from argparse import ArgumentParser  # Import ArgumentParser
 
 from coincheck_client import CoincheckClient
 from django.core.management.base import BaseCommand
+from management.tasks import Tasks
+from models.order import Order
 from models.orderbook import OrderBook
 from models.ticker import Ticker
 from models.trade import Trade
@@ -32,23 +34,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         method_name = inspect.currentframe().f_back.f_code.co_name
+        tasks = Tasks()
         UtxDBService().create_models_tables()
         signal.signal(signal.SIGINT, self.handle_interrupt)
         self.stdout.write(self.style.SUCCESS("Successfully ran strategies."))
-        coincheck = CoincheckClient()
         self.log = log(self.__class__.__name__)
-
-        # Retrieve sleeping_seconds from command-line arguments
         sleeping_seconds = options["sleeping_seconds"]
-
         while self._running:
             try:
-                res = coincheck.get_ticker()
-                Ticker.create_ticker_data(res)
-                res = coincheck.get_public_trades()
-                Trade.create_trades_data(res)
-                # res = coincheck.get_orderbooks()
-                # OrderBook.create_order_book(res)
+                tasks.run_tasks()
                 self.log.info(
                     method_name,
                     f"Batch processing completed. Sleeping for {sleeping_seconds} seconds...",

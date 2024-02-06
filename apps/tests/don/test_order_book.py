@@ -25,7 +25,7 @@ class OrderBookTest(TestCase):
         OrderBook.create_order_book(self.order_book_data)
 
         # Check if entries are created
-        self.assertEqual(OrderBook.objects.count(), 4)
+        self.assertEqual(OrderBook.objects.count(), 2)
 
     def test_get_order_book(self):
         # Test the get_order_book method

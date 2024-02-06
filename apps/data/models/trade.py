@@ -1,22 +1,26 @@
+# /app/apps/data/models/trade.py
+import logging
 from datetime import datetime
 
 from django.db import models
-from django.utils.dateparse import parse_datetime
+
+logger = logging.getLogger(__name__)
 
 
 class Trade(models.Model):
     utx_id = models.BigAutoField(primary_key=True)
-    id = models.DecimalField(max_digits=20, decimal_places=2)
-    amount = models.CharField(max_length=20)
+    id = models.FloatField()
     rate = models.CharField(max_length=20)
-    pair = models.CharField(max_length=20)
+    amount = models.CharField(max_length=20)
     order_type = models.CharField(max_length=10)
-    created_at = models.DateTimeField()
+    time_in_force = models.CharField(max_length=20)
+    stop_loss_rate = models.DateTimeField()
+    pair = models.DateTimeField()
     utx_create_time = models.DateTimeField()
 
     def __str__(self):
         ticker_dict = {
-            "Trade ID": self.utx_id,
+            "utx_trade ID": self.utx_id,
             "last": self.id,
             "bid": self.amount,
             "ask": self.rate,
@@ -64,11 +68,23 @@ class Trade(models.Model):
             Trade.create_trade_data(trade_data)
 
     def save(self, *args, **kwargs):
-        # Check if utx_create_time is not set
-        if not self.utx_create_time:
-            current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
-            self.utx_create_time = datetime.strptime(current_time, "%Y%m%d%H%M%S.%f")
-        super(Trade, self).save(*args, **kwargs)
+        try:
+            if not self.utx_create_time:
+                current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
+                self.utx_create_time = datetime.strptime(
+                    current_time, "%Y%m%d%H%M%S.%f"
+                )
+            super(Trade, self).save(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error saving {self.__class__.__name__} instance: {e}")
+            raise
+
+    def delete(self, *args, **kwargs):
+        try:
+            super(Trade, self).delete(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error deleting {self.__class__.__name__} instance: {e}")
+            raise
 
     class Meta:
         app_label = "data"  # Explicitly set the app_label to 'data'

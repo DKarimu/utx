@@ -5,7 +5,7 @@ from django.test import SimpleTestCase
 from apps.brokers.coincheck_client import CoincheckClient
 
 
-class TestCoincheckClient(SimpleTestCase):
+class CoincheckClientTest(SimpleTestCase):
     def test_ticker_returns_error(self):
         coincheck = CoincheckClient()
 

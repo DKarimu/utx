@@ -2,7 +2,7 @@ from django.test import TestCase
 from models.trade import Trade
 
 
-class TestTrade(TestCase):
+class TradeTest(TestCase):
     def test_trade_data_operations(self):
         # Create
         data_to_create = {

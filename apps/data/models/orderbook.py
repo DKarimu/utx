@@ -1,7 +1,10 @@
 # /app/apps/data/models/order_book.py
+import logging
 from datetime import datetime
 
 from django.db import models
+
+logger = logging.getLogger(__name__)
 
 
 class OrderBook(models.Model):
@@ -11,6 +14,17 @@ class OrderBook(models.Model):
     bid_price = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     bid_quantity = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     utx_create_time = models.DateTimeField()
+
+    def __str__(self):
+        order_book_dict = {
+            "utx_orderBook ID": self.utx_id,
+            "ask_price": self.ask_price,
+            "ask_quantity": self.ask_quantity,
+            "bid_price": self.bid_price,
+            "bid_quantity": self.bid_quantity,
+            "utx_create_time": self.utx_create_time,
+        }
+        return str(order_book_dict)
 
     @classmethod
     def create_order_book(cls, data):
@@ -56,11 +70,23 @@ class OrderBook(models.Model):
         cls.objects.all().delete()
 
     def save(self, *args, **kwargs):
-        # Check if utx_create_time is not set
-        if not self.utx_create_time:
-            current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
-            self.utx_create_time = datetime.strptime(current_time, "%Y%m%d%H%M%S.%f")
-        super(OrderBook, self).save(*args, **kwargs)
+        try:
+            if not self.utx_create_time:
+                current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
+                self.utx_create_time = datetime.strptime(
+                    current_time, "%Y%m%d%H%M%S.%f"
+                )
+            super(OrderBook, self).save(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error saving {self.__class__.__name__} instance: {e}")
+            raise
+
+    def delete(self, *args, **kwargs):
+        try:
+            super(OrderBook, self).delete(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error deleting {self.__class__.__name__} instance: {e}")
+            raise
 
     class Meta:
         app_label = "data"  # Explicitly set the app_label to 'data'

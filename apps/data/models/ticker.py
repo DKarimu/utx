@@ -1,7 +1,10 @@
 # /app/apps/data/models/ticker.py
+import logging
 from datetime import datetime
 
 from django.db import models
+
+logger = logging.getLogger(__name__)
 
 
 class Ticker(models.Model):
@@ -17,7 +20,7 @@ class Ticker(models.Model):
 
     def __str__(self):
         ticker_dict = {
-            "Trade ID": self.utx_id,
+            "utx_ticker ID": self.utx_id,
             "last": self.last,
             "bid": self.bid,
             "ask": self.ask,
@@ -63,11 +66,23 @@ class Ticker(models.Model):
         self.delete()
 
     def save(self, *args, **kwargs):
-        # Check if utx_create_time is not set
-        if not self.utx_create_time:
-            current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
-            self.utx_create_time = datetime.strptime(current_time, "%Y%m%d%H%M%S.%f")
-        super(Ticker, self).save(*args, **kwargs)
+        try:
+            if not self.utx_create_time:
+                current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
+                self.utx_create_time = datetime.strptime(
+                    current_time, "%Y%m%d%H%M%S.%f"
+                )
+            super(Ticker, self).save(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error saving {self.__class__.__name__} instance: {e}")
+            raise
+
+    def delete(self, *args, **kwargs):
+        try:
+            super(Ticker, self).delete(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error deleting {self.__class__.__name__} instance: {e}")
+            raise
 
     class Meta:
         app_label = "data"  # Explicitly set the app_label to 'data'
