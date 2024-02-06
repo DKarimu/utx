@@ -17,7 +17,7 @@ class BrokersConfig:
         self.additional_params = kwargs
 
 
-# Define instances for broker1 and broker2
+# Define instances for coincheck
 coincheck_cfg = BrokersConfig(
     access_key="",
     secret_access_key="",
