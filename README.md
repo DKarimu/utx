@@ -19,13 +19,11 @@ UniversalTraderX (UTX) is a versatile and broker-agnostic trading bot designed t
    ```bash
    git clone https://github.com/yourusername/UniversalTraderX.git
    
-## 1. Install dependencies:
-cd UniversalTraderX
-pip install -r requirements.txt
-
-## 2. Configure API and broker settings in the config/ directory.
-
-## 3. Run the trading bot:
+# 1. Install dependencies:
+   cd UniversalTraderX
+   pip install -r requirements.txt
+# 2. Configure API and broker settings in the config/ directory.
+# 3. Run the trading bot:
 ./torun.sh
 
 # Docker
