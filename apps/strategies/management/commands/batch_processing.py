@@ -43,10 +43,12 @@ class Command(BaseCommand):
 
         while self._running:
             try:
-                Ticker.create_ticker_data(coincheck.get_ticker())
-                Trade.create_trades_data(coincheck.get_public_trades())
-                res = coincheck.get_orderbooks()
-                OrderBook.create_order_book(res)
+                res = coincheck.get_ticker()
+                Ticker.create_ticker_data(res)
+                res = coincheck.get_public_trades()
+                Trade.create_trades_data(res)
+                # res = coincheck.get_orderbooks()
+                # OrderBook.create_order_book(res)
                 self.log.info(
                     method_name,
                     f"Batch processing completed. Sleeping for {sleeping_seconds} seconds...",

@@ -17,27 +17,21 @@ class OrderBook(models.Model):
         ask_data = data["asks"]
         bid_data = data["bids"]
 
-        # Create ask entries
+        # Create ask and bid entries
         ask_entries = []
-        for ask_price, ask_quantity in ask_data:
-            ask_entry = cls.objects.create(
+        bid_entries = []
+
+        for (ask_price, ask_quantity), (bid_price, bid_quantity) in zip(
+            ask_data, bid_data
+        ):
+            entry = cls.objects.create(
                 ask_price=ask_price,
                 ask_quantity=ask_quantity,
-                bid_price=None,
-                bid_quantity=None,
-            )
-            ask_entries.append([ask_entry.ask_price, str(ask_entry.ask_quantity)])
-
-        # Create bid entries
-        bid_entries = []
-        for bid_price, bid_quantity in bid_data:
-            bid_entry = cls.objects.create(
                 bid_price=bid_price,
                 bid_quantity=bid_quantity,
-                ask_price=None,
-                ask_quantity=None,
             )
-            bid_entries.append([bid_entry.bid_price, str(bid_entry.bid_quantity)])
+            ask_entries.append([entry.ask_price, str(entry.ask_quantity)])
+            bid_entries.append([entry.bid_price, str(entry.bid_quantity)])
 
         return {"asks": ask_entries, "bids": bid_entries}
 
@@ -56,27 +50,6 @@ class OrderBook(models.Model):
                 order_book["bids"].append([entry.bid_price, str(entry.bid_quantity)])
 
         return order_book
-
-    @classmethod
-    def update_order_book(cls, data):
-        # Fetch all existing entries
-        existing_entries = cls.objects.all()
-
-        # Update ask entries
-        ask_data = data["asks"]
-        for i, (ask_price, ask_quantity) in enumerate(ask_data):
-            existing_entry = existing_entries[i]
-            existing_entry.ask_price = ask_price
-            existing_entry.ask_quantity = ask_quantity
-            existing_entry.save()
-
-        # Update bid entries
-        bid_data = data["bids"]
-        for i, (bid_price, bid_quantity) in enumerate(bid_data):
-            existing_entry = existing_entries[len(ask_data) + i]
-            existing_entry.bid_price = bid_price
-            existing_entry.bid_quantity = bid_quantity
-            existing_entry.save()
 
     @classmethod
     def delete_order_book(cls):

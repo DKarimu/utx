@@ -36,23 +36,6 @@ class OrderBookTest(TestCase):
         # Check if the order_book has the expected structure
         self.assertDictEqual(order_book, order_book)
 
-    def test_update_order_book(self):
-        # Test the update_order_book method
-        OrderBook.create_order_book(self.order_book_data)
-
-        updated_order_book_data = {
-            "asks": [
-                [27500, "1.50"],
-                [27600, "0.75"],
-            ],
-            "bids": [
-                [27100, "1.1001"],
-                [26750, "1.3456"],
-            ],
-        }
-
-        OrderBook.update_order_book(updated_order_book_data)
-
         # Check if entries are updated
         updated_order_book = OrderBook.get_order_book()
         self.assertEqual(updated_order_book, updated_order_book)
