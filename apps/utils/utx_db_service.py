@@ -4,6 +4,10 @@ import os
 
 from django.apps import apps
 from django.db import connection
+from models.order import Order
+from models.orderbook import OrderBook
+from models.ticker import Ticker
+from models.trade import Trade
 
 
 class UtxDBService:

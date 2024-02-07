@@ -1,4 +1,3 @@
-# /app/apps/data/models/ticker.py
 import logging
 from datetime import datetime
 
@@ -16,32 +15,23 @@ class Ticker(models.Model):
     low = models.FloatField()
     volume = models.FloatField()
     timestamp = models.DateTimeField()
-    utx_create_time = models.DateTimeField()
-
-    def __str__(self):
-        ticker_dict = {
-            "utx_ticker ID": self.utx_id,
-            "last": self.last,
-            "bid": self.bid,
-            "ask": self.ask,
-            "high": self.high,
-            "low": self.low,
-            "volume": self.volume,
-            "timestamp": self.timestamp,
-        }
-        return str(ticker_dict)
+    utx_create_time = models.DateTimeField(auto_now_add=True)
 
     @classmethod
     def create_ticker_data(cls, data):
-        timestamp = datetime.fromtimestamp(data["timestamp"])
+        data.pop("id", None)
+        if "timestamp" in data:
+            data["timestamp"] = datetime.fromtimestamp(data["timestamp"])
+        logger.debug(f"Creating Ticker with data: {data}")
         return cls.objects.create(
-            last=data["last"],
-            bid=data["bid"],
-            ask=data["ask"],
-            high=data["high"],
-            low=data["low"],
-            volume=data["volume"],
-            timestamp=timestamp,
+            utx_id=data.get("utx_id"),
+            last=data.get("last"),
+            bid=data.get("bid"),
+            ask=data.get("ask"),
+            high=data.get("high"),
+            low=data.get("low"),
+            volume=data.get("volume"),
+            timestamp=data.get("timestamp"),  # Already converted to datetime if present
         )
 
     @classmethod
@@ -53,36 +43,12 @@ class Ticker(models.Model):
         return cls.objects.get(utx_id=ticker_data_id)
 
     def update_ticker_data(self, data):
-        self.last = data["last"]
-        self.bid = data["bid"]
-        self.ask = data["ask"]
-        self.high = data["high"]
-        self.low = data["low"]
-        self.volume = data["volume"]
-        self.timestamp = datetime.fromtimestamp(data["timestamp"])
+        for field, value in data.items():
+            if field == "timestamp":
+                value = datetime.fromtimestamp(value)
+            setattr(self, field, value)
         self.save()
 
-    def delete_ticker_data(self):
-        self.delete()
-
-    def save(self, *args, **kwargs):
-        try:
-            if not self.utx_create_time:
-                current_time = datetime.now().strftime("%Y%m%d%H%M%S.%f")[:-3]
-                self.utx_create_time = datetime.strptime(
-                    current_time, "%Y%m%d%H%M%S.%f"
-                )
-            super(Ticker, self).save(*args, **kwargs)
-        except Exception as e:
-            logger.error(f"Error saving {self.__class__.__name__} instance: {e}")
-            raise
-
-    def delete(self, *args, **kwargs):
-        try:
-            super(Ticker, self).delete(*args, **kwargs)
-        except Exception as e:
-            logger.error(f"Error deleting {self.__class__.__name__} instance: {e}")
-            raise
-
     class Meta:
-        app_label = "data"  # Explicitly set the app_label to 'data'
+        app_label = "data"
+        ordering = ["-timestamp"]

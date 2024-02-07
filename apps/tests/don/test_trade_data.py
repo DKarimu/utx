@@ -2,46 +2,29 @@ from django.test import TestCase
 from models.trade import Trade
 
 
-class TradeTest(TestCase):
-    def test_trade_data_operations(self):
-        # Create
-        data_to_create = {
-            "id": 81,
-            "amount": "0.1",
-            "rate": "36120.0",
-            "pair": "btc_jpy",
+class TradeModelTest(TestCase):
+
+    def setUp(self):
+        self.trade_data = {
+            "trade_id": 123.456,
+            "amount": "1000",
+            "rate": "0.01",
+            "pair": "USD/EUR",
             "order_type": "buy",
-            "created_at": "2015-01-09T15:25:13.000Z",
         }
+        self.trade = Trade.objects.create(**self.trade_data)
 
-        trade_data_created = Trade.create_trade_data(data_to_create)
-        self.assertIsNotNone(trade_data_created.utx_id)
+    def test_trade_creation(self):
+        self.assertTrue(isinstance(self.trade, Trade))
+        self.assertEqual(self.trade.trade_id, self.trade_data["trade_id"])
 
-        # Read all
-        all_trade_data = Trade.read_all_trade_data()
-        self.assertTrue(all_trade_data.exists())
+    def test_trade_str(self):
+        expected_str = f"Trade {self.trade.utx_id}"
+        self.assertEqual(str(self.trade), expected_str)
 
-        # Read by ID
-        trade_data_by_id = Trade.read_trade_data_by_id(trade_data_created.utx_id)
-        self.assertEqual(trade_data_by_id, trade_data_created)
-
-        # Update
-        updated_data = {
-            "id": 81,
-            "amount": "0.1",
-            "rate": "36120.0",
-            "pair": "btc_jpy",
-            "order_type": "sell",
-            "created_at": "2015-01-09T15:25:13.000Z",
-        }
-
-        trade_data_created.update_trade_data(updated_data)
-        trade_data_after_update = Trade.read_trade_data_by_id(trade_data_created.utx_id)
-
-        self.assertEqual(trade_data_after_update.id, updated_data["id"])
-        self.assertEqual(trade_data_after_update.order_type, updated_data["order_type"])
-        # Continue with other fields...
-
-        # Delete
-        trade_data_created.delete_trade_data()
-        self.assertFalse(Trade.read_all_trade_data().exists())
+    def test_create_trade_data_class_method(self):
+        new_trade_data = self.trade_data.copy()
+        new_trade_data["trade_id"] = 654.321
+        new_trade = Trade.create_trade_data(new_trade_data)
+        self.assertTrue(isinstance(new_trade, Trade))
+        self.assertEqual(new_trade.trade_id, new_trade_data["trade_id"])

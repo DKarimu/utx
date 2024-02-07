@@ -1,10 +1,21 @@
-# /app/apps/strategies/management/tasks.py
-import inspect
-
 from coincheck_client import CoincheckClient
 from models.ticker import Ticker
 from models.trade import Trade
 from utx_logger import UtxLogger as log
+
+
+def log_task(method):
+    def wrapper(self, *args, **kwargs):
+        self.log.info(f"{method.__name__}", "Starting task")
+        try:
+            result = method(self, *args, **kwargs)
+            self.log.info(f"{method.__name__}", "Task completed successfully")
+            return result
+        except Exception as e:
+            self.log.error(f"{method.__name__}", f"Error: {str(e)}")
+            raise e
+
+    return wrapper
 
 
 class Tasks:
@@ -13,23 +24,19 @@ class Tasks:
         self.coincheck = CoincheckClient()
 
     def run_tasks(self):
-        method_name = inspect.currentframe().f_back.f_code.co_name
         try:
-            self.log.info(method_name, "Fetching tasks to run")
             self.create_ticker_data()
             self.create_trades_data()
-
         except Exception as e:
-            self.log.error(method_name, f"Error in run_tasks: {str(e)}")
+            # General error handling if needed
+            pass
 
+    @log_task
     def create_ticker_data(self):
-        try:
-            Ticker.create_ticker_data(self.coincheck.get_ticker())
-        except Exception as e:
-            self.log.error("create_ticker_data", f"Error: {str(e)}")
+        res = self.coincheck.get_ticker()
+        Ticker.create_ticker_data(res)
 
+    @log_task
     def create_trades_data(self):
-        try:
-            Trade.create_trades_data(self.coincheck.get_public_trades())
-        except Exception as e:
-            self.log.error("create_trades_data", f"Error: {str(e)}")
+        res = self.coincheck.get_public_trades()
+        Trade.create_trades_data(res)

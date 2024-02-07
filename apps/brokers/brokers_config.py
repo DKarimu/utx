@@ -52,7 +52,6 @@ coincheck_cfg = BrokersConfig(
     },
 )
 
-
 broker1_config = BrokersConfig(
     access_key="your_broker2_api_key",
     secret_access_key="your_broker2_secret_key",
