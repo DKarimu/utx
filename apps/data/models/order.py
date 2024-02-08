@@ -23,14 +23,14 @@ class Order(models.Model):
             super().save(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error saving Order instance: {e}")
-            raise
+            pass
 
     def delete(self, *args, **kwargs):
         try:
             super().delete(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error deleting Order instance: {e}")
-            raise
+            pass
 
     class Meta:
         app_label = "data"

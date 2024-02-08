@@ -1,6 +1,5 @@
 import signal
 import time
-from argparse import ArgumentParser
 
 from django.core.management.base import BaseCommand
 from management.tasks import Tasks
@@ -24,7 +23,6 @@ class Command(BaseCommand):
         self._running = True
         self.log = log(self.__class__.__name__)
         self.tasks = Tasks()
-        # Assuming creating models' tables is idempotent or checked within the method
         UtxDBService().create_models_tables()
 
     def handle(self, *args, **options):
@@ -37,7 +35,7 @@ class Command(BaseCommand):
 
     def execute_tasks(self, sleeping_seconds):
         try:
-            self.tasks.run_tasks()
+            self.tasks.run_all_tasks()
             self.log_info(
                 f"Batch processing completed. Sleeping for {sleeping_seconds} seconds..."
             )
@@ -50,10 +48,11 @@ class Command(BaseCommand):
         self.log.info(self.__class__.__name__, message)
 
     def handle_exception(self, e):
-        msg = f"Error during batch processing: {str(e)}"
+        sleeping_seconds_on_error = 60
+        msg = f"Error during batch processing: {str(e)}.Sleeping for {sleeping_seconds_on_error} seconds..."
         self.stderr.write(self.style.ERROR(msg))
         self.log.error(self.__class__.__name__, msg)
-        time.sleep(60)  # Consider making this delay configurable
+        time.sleep(60)
 
     def handle_interrupt(self, signum, frame):
         self._prompt_to_continue()

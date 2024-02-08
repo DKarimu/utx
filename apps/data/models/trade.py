@@ -30,14 +30,14 @@ class Trade(models.Model):
             super().save(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error saving Trade instance: {e}")
-            raise
+            pass
 
     def delete(self, *args, **kwargs):
         try:
             super().delete(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error deleting Trade instance: {e}")
-            raise
+            pass
 
     class Meta:
         app_label = "data"

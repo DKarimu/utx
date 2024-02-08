@@ -1,5 +1,3 @@
-# config/settings_local.py
-
 import os
 
 # Database

@@ -1,5 +1,3 @@
-# coincheck_client.py
-
 import hashlib
 import hmac
 import inspect

@@ -1,5 +1,3 @@
-# test_coincheck_client.py
-
 from django.test import SimpleTestCase
 
 from apps.brokers.coincheck_client import CoincheckClient

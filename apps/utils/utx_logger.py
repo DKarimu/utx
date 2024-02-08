@@ -3,38 +3,41 @@ import logging
 
 class UtxLogger:
     def __init__(self, class_name):
-        self.log = logging.getLogger("django.utx." + class_name)
+        self.log = logging.getLogger(f"django.utx.{class_name}")
 
-    def log_message(self, method_name, msg, level=logging.INFO):
+    def _log_message(self, method_name, msg, level):
+        """Log a message with a specific level."""
         self.log.log(
-            level,
-            msg,
-            extra={"class_name": self.log.name, "method_name": method_name},
+            level, msg, extra={"class_name": self.log.name, "method_name": method_name}
         )
 
     def error(self, method_name, msg):
-        self.log_message(method_name, msg, level=logging.ERROR)
+        """Log an error message."""
+        self._log_message(method_name, msg, logging.ERROR)
 
     def warning(self, method_name, msg):
-        self.log_message(method_name, msg, level=logging.WARNING)
+        """Log a warning message."""
+        self._log_message(method_name, msg, logging.WARNING)
 
     def info(self, method_name, msg):
-        self.log_message(method_name, msg, level=logging.INFO)
+        """Log an info message."""
+        self._log_message(method_name, msg, logging.INFO)
 
     def debug(self, method_name, msg):
-        self.log_message(method_name, msg, level=logging.DEBUG)
+        """Log a debug message."""
+        self._log_message(method_name, msg, logging.DEBUG)
 
     def handle_request_error(
-        self, error, status_code=None, method_name=None, response_text=None
+        self, error, status_code=None, method_name="unknown_method", response_text=None
     ):
-        error_msg = (
-            f"{error}, Status code: {status_code}, Response text: {response_text}"
-            if status_code
-            else str(error)
+        """Handle an error from a request, logging it appropriately."""
+        error_msg = f"{error}"
+        if status_code:
+            error_msg += f", Status code: {status_code}"
+        if response_text:
+            error_msg += f", Response text: {response_text}"
+
+        self.log.error(
+            error_msg, extra={"class_name": self.log.name, "method_name": method_name}
         )
-        log_params = {
-            "class_name": self.log.name,
-            "method_name": method_name or "unknown_method",
-        }
-        self.log.error(error_msg, extra=log_params)
         return {"error": error_msg}

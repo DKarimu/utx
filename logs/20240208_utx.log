@@ -1,0 +1,17 @@
+INFO  2024.02.08 13:57:33 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 13:57:33 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 13:57:35 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 13:57:35 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 13:57:35 django.utx.Command.Command: Batch processing completed. Sleeping for 10 seconds...

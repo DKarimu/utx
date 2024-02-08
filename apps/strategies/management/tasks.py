@@ -1,3 +1,5 @@
+import inspect
+
 from coincheck_client import CoincheckClient
 from models.ticker import Ticker
 from models.trade import Trade
@@ -5,15 +7,15 @@ from utx_logger import UtxLogger as log
 
 
 def log_task(method):
-    def wrapper(self, *args, **kwargs):
-        self.log.info(f"{method.__name__}", "Starting task")
+    def wrapper(task, *args, **kwargs):
+        task.log.info(f"{method.__name__}", "Starting task")
         try:
-            result = method(self, *args, **kwargs)
-            self.log.info(f"{method.__name__}", "Task completed successfully")
+            result = method(task, *args, **kwargs)
+            task.log.info(f"{method.__name__}", "Task completed successfully")
             return result
         except Exception as e:
-            self.log.error(f"{method.__name__}", f"Error: {str(e)}")
-            raise e
+            task.log.error(f"{method.__name__}", f"Error: {str(e)}")
+            pass
 
     return wrapper
 
@@ -23,13 +25,20 @@ class Tasks:
         self.log = log(self.__class__.__name__)
         self.coincheck = CoincheckClient()
 
-    def run_tasks(self):
-        try:
-            self.create_ticker_data()
-            self.create_trades_data()
-        except Exception as e:
-            # General error handling if needed
-            pass
+    def run_all_tasks(self):
+        method_names = [
+            method_name
+            for method_name in dir(self)
+            if callable(getattr(self, method_name)) and not method_name.startswith("_")
+        ]
+        for method_name in method_names:
+            method = getattr(self, method_name)
+            if method_name != inspect.currentframe().f_back.f_code.co_name:
+                try:
+                    method()
+                except Exception as e:
+                    self.log.error(f"{method_name}", f"Error: {str(e)}")
+                    pass
 
     @log_task
     def create_ticker_data(self):
@@ -40,3 +49,5 @@ class Tasks:
     def create_trades_data(self):
         res = self.coincheck.get_public_trades()
         Trade.create_trades_data(res)
+
+    # add more task methods here

@@ -1,4 +1,3 @@
-# broker_config.py
 class BrokersConfig:
     def __init__(
         self,
