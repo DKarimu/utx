@@ -1,17 +1,257 @@
-INFO  2024.02.08 13:57:33 django.utx.Tasks.create_ticker_data: Starting task
-INFO  2024.02.08 13:57:33 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Task completed successfully
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Starting task
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Task completed successfully
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Starting task
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_ticker_data: Task completed successfully
-INFO  2024.02.08 13:57:34 django.utx.Tasks.create_trades_data: Starting task
-INFO  2024.02.08 13:57:34 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
-INFO  2024.02.08 13:57:35 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
-INFO  2024.02.08 13:57:35 django.utx.Tasks.create_trades_data: Task completed successfully
-INFO  2024.02.08 13:57:35 django.utx.Command.Command: Batch processing completed. Sleeping for 10 seconds...
+INFO  2024.02.08 18:24:29 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:29 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:29 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:29 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:29 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:29 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:30 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:30 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:30 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:30 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:30 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:30 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:30 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:30 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:30 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:30 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:30 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:30 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:30 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:30 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:30 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:30 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:24:35 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:35 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:35 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:35 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:35 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:35 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:36 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:36 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:36 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:36 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:36 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:36 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:36 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:36 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:36 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:36 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:36 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:36 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:36 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:36 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:36 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:36 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:24:41 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:41 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:41 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:41 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:41 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:41 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:41 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:42 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:42 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:42 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:42 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:42 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:42 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:42 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:42 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:43 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:43 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:43 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:43 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:43 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:43 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:43 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:48 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:48 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:49 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:49 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:49 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:49 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:49 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:49 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:49 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:49 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:24:54 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:54 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:54 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:54 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:54 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:54 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:54 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:54 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:54 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:24:54 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:24:55 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:24:55 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:24:55 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:24:55 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:24:55 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:24:55 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:24:55 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:55 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:55 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:24:55 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:24:55 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:24:55 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:25:00 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:00 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:00 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:00 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:00 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:00 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:00 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:01 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:01 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:01 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:01 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:01 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:01 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:01 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:01 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:01 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:01 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:01 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:01 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:01 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:01 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:01 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:25:06 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:06 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:06 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:06 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:06 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:06 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:07 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:07 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:07 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:07 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:07 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:07 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:07 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:07 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:08 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:08 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:08 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:08 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:08 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:08 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:08 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:08 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:13 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:13 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:14 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:14 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:14 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:14 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:14 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:14 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:14 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:14 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:19 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:19 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:20 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:20 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:20 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:20 django.utx.Tasks.run_strategies: Starting task
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.execute_strategy: Executing BTC Strategy
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.calculate_bollinger_bands: Calculating Bollinger Bands
+INFO  2024.02.08 18:25:20 django.utx.BTCStrategy.execute_strategy: NO CLEAR SIGNAL
+INFO  2024.02.08 18:25:20 django.utx.Tasks.run_strategies: Task completed successfully
+INFO  2024.02.08 18:25:20 django.utx.Command.Command: Batch processing completed. Sleeping for 5 seconds...
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.public_request: https://coincheck.com/api/trades?pair=btc_jpy& Request successful <Response [200]> data[3]
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_trades_data: Task completed successfully
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_ticker_data: Starting task
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.get_ticker: Fetching Ticker for pair: btc_jpy
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.public_request: https://coincheck.com/api/ticker?pair=btc_jpy& Request successful <Response [200]> data[7]
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_ticker_data: Task completed successfully
+INFO  2024.02.08 18:25:25 django.utx.Tasks.create_trades_data: Starting task
+INFO  2024.02.08 18:25:25 django.utx.CoincheckClient.get_public_trades: Fetching Public trades for pair: btc_jpy
