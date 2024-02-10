@@ -17,7 +17,7 @@ UniversalTraderX (UTX) is a versatile and broker-agnostic trading bot designed t
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/UniversalTraderX.git
+   git clone https://github.com/DKarimu/utx.git
    
 1. Install dependencies:
    cd UniversalTraderX
