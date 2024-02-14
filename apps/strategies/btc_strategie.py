@@ -63,17 +63,79 @@ class BTCStrategy:
         normalized_rsi = self.calculate_rsi(rates)
         volatility = self.calculate_price_volatility(rates)
 
+        # Determine trade action based on the rolling mean and current price
+        if rolling_mean.iloc[-1] < current_price:
+            trade_action = "BUY"
+        elif rolling_mean.iloc[-1] > current_price:
+            trade_action = "SELL"
+        else:
+            trade_action = (
+                "HOLD"  # You can choose to hold or define another action here
+            )
+
         # Organize data into a dictionary for DataFrame creation
         data = {
-            "TIME": [current_time],
+            "From": [trades[0].utx_create_time],
+            "To": [trades[199].utx_create_time],
             "CurrentPrice": [current_price],
             "RollingMean": [rolling_mean.iloc[-1]],
             "UpperBand": [upper_band.iloc[-1]],
             "LowerBand": [lower_band.iloc[-1]],
             "NormalizedRSI": [normalized_rsi.iloc[-1]],
             "Volatility": [volatility],
+            "TradeAction": [trade_action],  # Added trade action to the data
         }
         self.export_to_csv(data)
+
+    def load_and_apply_strategy(self):
+        # Load all trades from the database
+        all_trades = Trade.objects.all().order_by("created_at")
+        if not all_trades.exists():
+            self.log.info("load_and_apply_strategy", "No trade data available.")
+            return
+
+        # Convert trade data to a Pandas Series
+        rates = pd.Series([float(trade.rate) for trade in all_trades])
+
+        # Apply the strategy to the entire dataset
+        for start in range(0, len(rates), 200):
+            end = min(start + 200, len(rates))
+            segment_rates = rates[start:end]
+            current_price = segment_rates.iloc[-1]
+
+            # Apply calculations for the current segment
+            rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(
+                segment_rates
+            )
+            normalized_rsi = self.calculate_rsi(segment_rates)
+            volatility = self.calculate_price_volatility(segment_rates)
+
+            # Determine trade action for the current segment
+            trade_action = "HOLD"
+            if rolling_mean.iloc[-1] < current_price and trade_action == "HOLD":
+                trade_action = "BUY"
+            elif rolling_mean.iloc[-1] > current_price and trade_action == "BUY":
+                trade_action = "SELL"
+            else:
+                trade_action = "HOLD"
+
+            # Organize data for the current segment
+            data = {
+                "From": [all_trades[start].created_at],
+                "To": [all_trades[end - 1].created_at],
+                "CurrentPrice": [current_price],
+                "RollingMean": [rolling_mean.iloc[-1]],
+                "UpperBand": [upper_band.iloc[-1]],
+                "LowerBand": [lower_band.iloc[-1]],
+                "NormalizedRSI": [normalized_rsi.iloc[-1]],
+                "Volatility": [volatility],
+                "TradeAction": [trade_action],
+            }
+
+            # Export the current segment's data to CSV
+            self.export_to_csv(data)
+
+        self.log.info("load_and_apply_strategy", "Strategy applied to all trade data.")
 
     def export_to_csv(self, data):
         df = pd.DataFrame(data)

@@ -39,7 +39,7 @@ class Command(BaseCommand):
             self.log_info(
                 f"Batch processing completed. Sleeping for {sleeping_seconds} seconds..."
             )
-            time.sleep(sleeping_seconds)
+            # time.sleep(sleeping_seconds)
 
         except Exception as e:
             self.handle_exception(e)
