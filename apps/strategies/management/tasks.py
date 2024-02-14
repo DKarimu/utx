@@ -55,7 +55,8 @@ class Tasks:
     @log_task
     def run_strategies(self):
         btcs = BTCStrategy()
-        btcs.load_and_apply_strategy()
+        # btcs.load_and_apply_strategy()
+        btcs.test_strategy_over_periods("2024-02-08 18:24:30", "2024-02-14 14:18:03", 1)
         # btcs.execute_strategy()
 
     # add more task methods here

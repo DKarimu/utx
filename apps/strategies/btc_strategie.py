@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
 from models.trade import Trade
@@ -29,6 +29,7 @@ def log_method_call(method):
 class BTCStrategy:
     def __init__(self, config: StrategyConfig = StrategyConfig()):
         self.config = config
+        self.ready_to_buy = True
         self.log = log(self.__class__.__name__)
 
     @log_method_call
@@ -58,22 +59,24 @@ class BTCStrategy:
         trades = Trade.objects.all().order_by("-created_at")[:200]
         rates = pd.Series([float(trade.rate) for trade in trades])
         current_price = rates.iloc[0]
-        current_time = datetime.now().time()
         rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(rates)
         normalized_rsi = self.calculate_rsi(rates)
         volatility = self.calculate_price_volatility(rates)
 
-        # Determine trade action based on the rolling mean and current price
-        if rolling_mean.iloc[-1] < current_price:
-            trade_action = "BUY"
-        elif rolling_mean.iloc[-1] > current_price:
-            trade_action = "SELL"
-        else:
-            trade_action = (
-                "HOLD"  # You can choose to hold or define another action here
-            )
+        # Determine trade action based on the rolling mean, current price, and state
+        is_buy = rolling_mean.iloc[-1] < current_price
+        is_sell = rolling_mean.iloc[-1] > current_price
 
-        # Organize data into a dictionary for DataFrame creation
+        if self.ready_to_buy and is_buy:
+            trade_action = "BUY"
+            self.ready_to_buy = False
+        elif not self.ready_to_buy and is_sell:
+            trade_action = "SELL"
+            self.ready_to_buy = True
+        else:
+            trade_action = "HOLD"
+
+        # The rest of your method remains unchanged
         data = {
             "From": [trades[0].utx_create_time],
             "To": [trades[199].utx_create_time],
@@ -83,59 +86,87 @@ class BTCStrategy:
             "LowerBand": [lower_band.iloc[-1]],
             "NormalizedRSI": [normalized_rsi.iloc[-1]],
             "Volatility": [volatility],
-            "TradeAction": [trade_action],  # Added trade action to the data
+            "TradeAction": [trade_action],
         }
         self.export_to_csv(data)
 
-    def load_and_apply_strategy(self):
-        # Load all trades from the database
-        all_trades = Trade.objects.all().order_by("created_at")
-        if not all_trades.exists():
-            self.log.info("load_and_apply_strategy", "No trade data available.")
+    def load_and_apply_strategy(self, start_date, end_date):
+        # Convert start_date and end_date to datetime objects
+        start_datetime = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+        end_datetime = datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
+
+        # Filter trades within the given date range and order by creation time
+        trades = Trade.objects.filter(
+            created_at__range=(start_datetime, end_datetime)
+        ).order_by("-created_at")[:200]
+
+        if len(trades) == 0:
+            print("No trades found in the specified date range.")
             return
 
-        # Convert trade data to a Pandas Series
-        rates = pd.Series([float(trade.rate) for trade in all_trades])
+        rates = pd.Series([float(trade.rate) for trade in trades])
+        current_price = rates.iloc[0]
+        rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(rates)
+        normalized_rsi = self.calculate_rsi(rates)
+        volatility = self.calculate_price_volatility(rates)
 
-        # Apply the strategy to the entire dataset
-        for start in range(0, len(rates), 200):
-            end = min(start + 200, len(rates))
-            segment_rates = rates[start:end]
-            current_price = segment_rates.iloc[-1]
+        # Determine trade action based on the rolling mean, current price, and state
+        is_buy = rolling_mean.iloc[-1] < current_price
+        is_sell = rolling_mean.iloc[-1] > current_price
 
-            # Apply calculations for the current segment
-            rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(
-                segment_rates
-            )
-            normalized_rsi = self.calculate_rsi(segment_rates)
-            volatility = self.calculate_price_volatility(segment_rates)
-
-            # Determine trade action for the current segment
+        if self.ready_to_buy and is_buy:
+            trade_action = "BUY"
+            self.ready_to_buy = False
+        elif not self.ready_to_buy and is_sell:
+            trade_action = "SELL"
+            self.ready_to_buy = True
+        else:
             trade_action = "HOLD"
-            if rolling_mean.iloc[-1] < current_price and trade_action == "HOLD":
-                trade_action = "BUY"
-            elif rolling_mean.iloc[-1] > current_price and trade_action == "BUY":
-                trade_action = "SELL"
-            else:
-                trade_action = "HOLD"
 
-            # Organize data for the current segment
-            data = {
-                "From": [all_trades[start].created_at],
-                "To": [all_trades[end - 1].created_at],
-                "CurrentPrice": [current_price],
-                "RollingMean": [rolling_mean.iloc[-1]],
-                "UpperBand": [upper_band.iloc[-1]],
-                "LowerBand": [lower_band.iloc[-1]],
-                "NormalizedRSI": [normalized_rsi.iloc[-1]],
-                "Volatility": [volatility],
-                "TradeAction": [trade_action],
-            }
+        # Prepare the data for export
+        data = {
+            "From": [
+                trades[199].created_at if len(trades) >= 200 else trades[-1].created_at
+            ],
+            "To": [trades[0].created_at],
+            "CurrentPrice": [current_price],
+            "RollingMean": [rolling_mean.iloc[-1]],
+            "UpperBand": [upper_band.iloc[-1]],
+            "LowerBand": [lower_band.iloc[-1]],
+            "NormalizedRSI": [normalized_rsi.iloc[-1]],
+            "Volatility": [volatility],
+            "TradeAction": [trade_action],
+        }
+        self.export_to_csv(data)
 
-            # Export the current segment's data to CSV
-            self.export_to_csv(data)
+    def test_strategy_over_periods(self, start_date, end_date, period_days=None):
+        start_datetime = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+        end_datetime = datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
 
-        self.log.info("load_and_apply_strategy", "Strategy applied to all trade data.")
+        if period_days is None:
+            period_days = (end_datetime - start_datetime).days
+
+        current_start_datetime = start_datetime
+
+        while current_start_datetime < end_datetime:
+            current_end_datetime = current_start_datetime + timedelta(days=period_days)
+            if current_end_datetime > end_datetime:
+                current_end_datetime = end_datetime
+
+            current_start_date_str = current_start_datetime.strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            current_end_date_str = current_end_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+            # Apply the strategy for the current period
+            self.log.info(
+                "test_strategy_over_periods",
+                f"Applying strategy from {current_start_date_str} to {current_end_date_str}",
+            )
+            self.load_and_apply_strategy(current_start_date_str, current_end_date_str)
+
+            # Move to the next period
+            current_start_datetime = current_end_datetime
 
     def export_to_csv(self, data):
         df = pd.DataFrame(data)

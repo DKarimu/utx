@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Debug utx test",
+            "name": "Python: Debug utx Test",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
@@ -17,13 +17,29 @@
             }
         },
         {
-            "name": "Django: Batch Processing",
+            "name": "Django: Debug Batch Processing",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "args": [
               "batch_processing",
               "--sleeping_seconds=10"
+            ],
+            "django": true,
+            "console": "integratedTerminal",
+            "env": {
+                "DJANGO_DEBUG_LOG": "true"
+            },
+            "cwd": "${workspaceFolder}"
+          },
+          {
+            "name": "Django: Debug Strategies Test Fro 0s",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": [
+              "batch_processing",
+              "--sleeping_seconds=0"
             ],
             "django": true,
             "console": "integratedTerminal",
