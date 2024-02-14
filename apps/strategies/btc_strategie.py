@@ -78,8 +78,7 @@ class BTCStrategy:
 
         # The rest of your method remains unchanged
         data = {
-            "From": [trades[0].utx_create_time],
-            "To": [trades[199].utx_create_time],
+            "DateTime": [trades[199].utx_create_time],
             "CurrentPrice": [current_price],
             "RollingMean": [rolling_mean.iloc[-1]],
             "UpperBand": [upper_band.iloc[-1]],
@@ -101,7 +100,10 @@ class BTCStrategy:
         ).order_by("-created_at")[:200]
 
         if len(trades) == 0:
-            print("No trades found in the specified date range.")
+            self.log.info(
+                "load_and_apply_strategy",
+                "No trades found in the specified date range.",
+            )
             return
 
         rates = pd.Series([float(trade.rate) for trade in trades])
@@ -126,7 +128,7 @@ class BTCStrategy:
         # Prepare the data for export
         data = {
             "From": [
-                trades[199].created_at if len(trades) >= 200 else trades[-1].created_at
+                trades[19].created_at if len(trades) >= 20 else trades[-1].created_at
             ],
             "To": [trades[0].created_at],
             "CurrentPrice": [current_price],
