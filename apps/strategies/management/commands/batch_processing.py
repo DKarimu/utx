@@ -3,8 +3,8 @@ import time
 
 from django.core.management.base import BaseCommand
 from management.tasks import Tasks
-from utx_db_service import UtxDBService
-from utx_logger import UtxLogger as log
+from utx_db_util import UtxDBService
+from utx_logger_util import UtxLogger as log
 
 
 class Command(BaseCommand):

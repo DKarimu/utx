@@ -1,5 +1,6 @@
 import os
 
+import pandas as pd
 from django.apps import apps
 from django.db import connection, models
 

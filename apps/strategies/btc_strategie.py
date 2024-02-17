@@ -1,67 +1,43 @@
 import os
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 
 import pandas as pd
+from indexes import Indexes
 from models.trade import Trade
-from utx_logger import UtxLogger as log
-
-
-@dataclass
-class StrategyConfig:
-    moving_average_window: int = 20
-    std_dev_multiplier: int = 2
-    rsi_period: int = 14
+from strategies_config import StrategiesConfig
+from utx_logger_util import UtxLogger as log
+from utx_util import UtxUtils as uti
 
 
 def log_method_call(method):
     def wrapper(*args, **kwargs):
         self = args[0]
-        kwargs_str = (
-            ", ".join(f"{k}={v}" for k, v in kwargs.items()) if kwargs else "***"
-        )
-        self.log.info(method.__name__, f"Executing method with kwargs: {kwargs_str}")
+        self.log.info(method.__name__, f"Executing method")
         return method(*args, **kwargs)
 
     return wrapper
 
 
 class BTCStrategy:
-    def __init__(self, config: StrategyConfig = StrategyConfig()):
+    def __init__(self, config: StrategiesConfig = StrategiesConfig()):
         self.config = config
+        self.indexs = Indexes()
+        self.uti = uti()
         self.ready_to_buy = True
         self.log = log(self.__class__.__name__)
-
-    @log_method_call
-    def calculate_bollinger_bands(self, rates):
-        rolling_mean = rates.rolling(window=self.config.moving_average_window).mean()
-        rolling_std = rates.rolling(window=self.config.moving_average_window).std()
-        upper_band = rolling_mean + (rolling_std * self.config.std_dev_multiplier)
-        lower_band = rolling_mean - (rolling_std * self.config.std_dev_multiplier)
-        return rolling_mean, upper_band, lower_band
-
-    @log_method_call
-    def calculate_rsi(self, rates):
-        delta = rates.diff().dropna()
-        gain = delta.where(delta > 0, 0).rolling(window=self.config.rsi_period).mean()
-        loss = -delta.where(delta < 0, 0).rolling(window=self.config.rsi_period).mean()
-        rs = gain / loss
-        rsi = 100 - (100 / (1 + rs))
-        normalized_rsi = (rsi - 50) * 0.02
-        return normalized_rsi
-
-    @log_method_call
-    def calculate_price_volatility(self, rates):
-        volatility = rates.std()
-        return volatility
 
     def execute_strategy(self):
         trades = Trade.objects.all().order_by("-created_at")[:200]
         rates = pd.Series([float(trade.rate) for trade in trades])
         current_price = rates.iloc[0]
-        rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(rates)
-        normalized_rsi = self.calculate_rsi(rates)
-        volatility = self.calculate_price_volatility(rates)
+        maw = self.config.moving_average_window
+        sdm = self.config.std_dev_multiplier
+        rsi_period = self.config.rsi_period
+        rolling_mean, upper_band, lower_band = self.indexs.calculate_bollinger_bands(
+            rates, maw, sdm
+        )
+        normalized_rsi = self.indexs.calculate_rsi(rates, rsi_period)
+        volatility = self.indexs.calculate_price_volatility(rates)
 
         # Determine trade action based on the rolling mean, current price, and state
         is_buy = rolling_mean.iloc[-1] < current_price
@@ -87,7 +63,7 @@ class BTCStrategy:
             "Volatility": [volatility],
             "TradeAction": [trade_action],
         }
-        self.export_to_csv(data)
+        self.uti.export_to_csv(data, "BtcStraTesting.csv")
 
     def load_and_apply_strategy(self, start_date, end_date):
         # Convert start_date and end_date to datetime objects
@@ -139,7 +115,7 @@ class BTCStrategy:
             "Volatility": [volatility],
             "TradeAction": [trade_action],
         }
-        self.export_to_csv(data)
+        self.uti.export_to_csv(data)
 
     def test_strategy_over_periods(self, start_date, end_date, period_days=None):
         start_datetime = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
@@ -169,12 +145,3 @@ class BTCStrategy:
 
             # Move to the next period
             current_start_datetime = current_end_datetime
-
-    def export_to_csv(self, data):
-        df = pd.DataFrame(data)
-        file_exists = os.path.isfile("btc_strategy_output.csv")
-        with open("btc_strategy_output.csv", "a") as f:
-            df.to_csv(f, header=not file_exists, index=False)
-        self.log.info(
-            "export_to_csv", "Strategy output appended to btc_strategy_output.csv"
-        )

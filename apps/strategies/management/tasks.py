@@ -4,7 +4,7 @@ from btc_strategie import BTCStrategy
 from coincheck_client import CoincheckClient
 from models.ticker import Ticker
 from models.trade import Trade
-from utx_logger import UtxLogger as log
+from utx_logger_util import UtxLogger as log
 
 
 def log_task(method):
@@ -15,7 +15,7 @@ def log_task(method):
             task.log.info(f"{method.__name__}", "Task completed successfully")
             return result
         except Exception as e:
-            task.log.error(f"{method.__name__}", f"Error: {str(e)}")
+            task.log.error(f"{method.__name__}", f"{str(e)}")
             pass
 
     return wrapper

@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 
 import requests
 from brokers_config import coincheck_cfg
-from utx_logger import UtxLogger as log
+from utx_logger_util import UtxLogger as log
 
 
 class CoincheckClient:
