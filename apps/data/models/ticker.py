@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 
 from django.db import models
+from util import UtxUtils
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,6 @@ class Ticker(models.Model):
     low = models.FloatField()
     volume = models.FloatField()
     timestamp = models.DateTimeField()
-    utx_create_time = models.DateTimeField(auto_now_add=True)
 
     @classmethod
     def create_ticker_data(cls, data):
@@ -48,6 +48,14 @@ class Ticker(models.Model):
                 value = datetime.fromtimestamp(value)
             setattr(self, field, value)
         self.save()
+
+    def save(self, *args, **kwargs):
+        try:
+            self.utx_id = UtxUtils().generate_utx_id()
+            super().save(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error saving Trade instance: {e}")
+            pass
 
     class Meta:
         app_label = "data"

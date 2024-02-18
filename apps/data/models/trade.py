@@ -1,6 +1,7 @@
 import logging
 
 from django.db import models
+from util import UtxUtils
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +14,6 @@ class Trade(models.Model):
     pair = models.CharField(max_length=10)
     order_type = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
-    utx_create_time = models.DateTimeField(auto_now_add=True)
 
     @classmethod
     def create_trade_data(cls, data):
@@ -27,6 +27,7 @@ class Trade(models.Model):
 
     def save(self, *args, **kwargs):
         try:
+            self.utx_id = UtxUtils().generate_utx_id()
             super().save(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error saving Trade instance: {e}")

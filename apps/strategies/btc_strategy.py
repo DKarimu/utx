@@ -3,10 +3,11 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 from indexes import Indexes
+from logger_util import UtxLogger as log
 from models.trade import Trade
-from strategies_config import StrategiesConfig
-from utx_logger_util import UtxLogger as log
-from utx_util import UtxUtils as uti
+from util import UtxUtils as uti
+
+from apps.strategies.config import StrategiesConfig
 
 
 def log_method_call(method):
@@ -54,7 +55,7 @@ class BTCStrategy:
 
         # The rest of your method remains unchanged
         data = {
-            "DateTime": [trades[199].utx_create_time],
+            "DateTime": [trades[199].utx_id],
             "CurrentPrice": [current_price],
             "RollingMean": [rolling_mean.iloc[-1]],
             "UpperBand": [upper_band.iloc[-1]],

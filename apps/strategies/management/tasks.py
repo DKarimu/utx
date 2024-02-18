@@ -1,10 +1,10 @@
 import inspect
 
-from btc_strategie import BTCStrategy
+from btc_strategy import BTCStrategy
 from coincheck_client import CoincheckClient
+from logger_util import UtxLogger as log
 from models.ticker import Ticker
 from models.trade import Trade
-from utx_logger_util import UtxLogger as log
 
 
 def log_task(method):

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from models.orderbook import OrderBook
+from models.order_book import OrderBook
 
 
 class OrderBookModelTests(TestCase):

@@ -1,6 +1,7 @@
 import logging
 
 from django.db import models
+from util import UtxUtils
 
 logger = logging.getLogger(__name__)
 
@@ -16,10 +17,10 @@ class Order(models.Model):
     stop_loss_rate = models.DecimalField(max_digits=10, decimal_places=2)
     pair = models.CharField(max_length=10, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    utx_create_time = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         try:
+            self.utx_id = UtxUtils().generate_utx_id()
             super().save(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error saving Order instance: {e}")

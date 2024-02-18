@@ -2,6 +2,7 @@ import logging
 
 from django.db import models
 from django.utils import timezone
+from util import UtxUtils
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,6 @@ class OrderBook(models.Model):
     bid_quantity = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
-    utx_create_time = models.DateTimeField(default=timezone.now)
 
     @classmethod
     def create_order_book(cls, data):
@@ -68,6 +68,7 @@ class OrderBook(models.Model):
 
     def save(self, *args, **kwargs):
         try:
+            self.utx_id = UtxUtils().generate_utx_id()
             super().save(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error saving Order instance: {e}")

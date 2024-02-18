@@ -1,7 +1,8 @@
+import datetime
 import os
 
 import pandas as pd
-from utx_logger_util import UtxLogger as log
+from logger_util import UtxLogger as log
 
 
 class UtxUtils:
@@ -15,3 +16,7 @@ class UtxUtils:
         with open(filename, "a") as f:
             df.to_csv(f, header=not file_exists, index=False)
         self.log.info("export_to_csv", f"Strategy output appended to {filename}")
+
+    @staticmethod
+    def generate_utx_id():
+        return datetime.datetime.now().strftime("%Y%d%m%H%M%S%f")[:-3]

@@ -5,8 +5,9 @@ import time
 from urllib.parse import urlencode
 
 import requests
-from brokers_config import coincheck_cfg
-from utx_logger_util import UtxLogger as log
+from logger_util import UtxLogger as log
+
+from apps.brokers.config import coincheck_cfg
 
 
 class CoincheckClient:
