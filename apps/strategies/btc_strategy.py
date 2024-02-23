@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 from indexes import Indexes
 from logger_util import UtxLogger as log
+from models.order import Order
 from models.trade import Trade
 from util import UtxUtils as uti
 
@@ -44,10 +45,8 @@ class BTCStrategy:
 
         if is_buy:
             trade_action = "BUY"
-        elif is_sell:
-            trade_action = "SELL"
         else:
-            trade_action = "HOLD"
+            trade_action = "SELL"
 
         # The rest of your method remains unchanged
         data = {
@@ -61,6 +60,7 @@ class BTCStrategy:
             "TradeAction": [trade_action],
         }
         self.uti.export_to_csv(data, "BtcStraTesting.csv")
+        return data
 
     def load_and_apply_strategy(self, start_date, end_date):
         # Convert start_date and end_date to datetime objects
@@ -93,10 +93,8 @@ class BTCStrategy:
 
         if is_buy:
             trade_action = "BUY"
-        elif is_sell:
-            trade_action = "SELL"
         else:
-            trade_action = "HOLD"
+            trade_action = "SELL"
 
         # Prepare the data for export
         data = {
@@ -112,7 +110,8 @@ class BTCStrategy:
             "Volatility": [volatility],
             "TradeAction": [trade_action],
         }
-        self.uti.export_to_csv(data)
+        self.uti.export_to_csv(data, "BtcStraTesting.csv")
+        return data
 
     def test_strategy_over_periods(self, start_date, end_date, period_days=None):
         start_datetime = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
@@ -142,3 +141,45 @@ class BTCStrategy:
 
             # Move to the next period
             current_start_datetime = current_end_datetime
+
+    def create_order_simulation(self):
+        last_order = Order.objects.order_by("-created_at").first()
+        strategy_result = self.execute_strategy()
+        trade_action = strategy_result.get("TradeAction")[0]
+        current_price = strategy_result.get("CurrentPrice")[0]
+
+        self.log.info(
+            "create_order_simulation",
+            f"last_order: {last_order}, trade_action: {trade_action}",
+        )
+
+        if last_order is not None:
+            if last_order.order_type == "BUY" and trade_action == "SELL":
+                new_order_type = "SELL"
+            elif last_order.order_type == "SELL" and trade_action == "BUY":
+                new_order_type = "BUY"
+            else:
+                return
+            new_order = Order(
+                order_type=new_order_type,
+                rate=current_price,
+                id="utx_simulation",
+                amount="0.05",
+                time_in_force="utx_simulation",
+                stop_loss_rate=None,
+                pair="btc_jpy",
+            )
+            new_order.save()
+
+        else:
+            new_order_type = trade_action
+            new_order = Order(
+                order_type=new_order_type,
+                rate=current_price,
+                id="utx_simulation",
+                amount="0.05",
+                time_in_force="utx_simulation",
+                stop_loss_rate=None,
+                pair="btc_jpy",
+            )
+            new_order.save()

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class Order(models.Model):
     utx_id = models.BigAutoField(primary_key=True)
     success = models.BooleanField(default=False)  # Set an appropriate default value
-    order_id = models.CharField(max_length=255, db_index=True)
+    id = models.CharField(max_length=255, db_index=True)
     rate = models.DecimalField(max_digits=10, decimal_places=2)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     order_type = models.CharField(max_length=50)

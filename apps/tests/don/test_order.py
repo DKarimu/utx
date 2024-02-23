@@ -22,7 +22,7 @@ class OrderModelTest(TestCase):
 
         # Check if the Order fields were saved correctly
         self.assertEqual(order.success, True)
-        self.assertEqual(order.order_id, "123456")
+        self.assertEqual(order.id, "123456")
         self.assertEqual(order.rate, 100.00)
         self.assertEqual(order.amount, 2.00)
         self.assertEqual(order.order_type, "Market")
