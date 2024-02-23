@@ -14,7 +14,7 @@ class CoincheckClientTest(SimpleTestCase):
         res = coincheck.get_public_trades()
         self.assertNotIn("error", res)
 
-        res = coincheck.get_orderbooks()
+        res = coincheck.get_order_books()
         self.assertNotIn("error", res)
 
         res = coincheck.get_calc_rate("btc_jpy", "buy", "1", "28000")

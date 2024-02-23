@@ -160,7 +160,7 @@ class CoincheckClient:
         self.log.info(method_name, f"Fetching Public trades for pair: {pair}")
         return self.public_request(method_name, pair=pair)
 
-    def get_orderbooks(self):
+    def get_order_books(self):
         """
         Order Book
         Fetch order book information.

@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta
 
 import pandas as pd
@@ -24,7 +23,6 @@ class BTCStrategy:
         self.config = config
         self.indexs = Indexes()
         self.uti = uti()
-        self.ready_to_buy = True
         self.log = log(self.__class__.__name__)
 
     def execute_strategy(self):
@@ -44,12 +42,10 @@ class BTCStrategy:
         is_buy = rolling_mean.iloc[-1] < current_price
         is_sell = rolling_mean.iloc[-1] > current_price
 
-        if self.ready_to_buy and is_buy:
+        if is_buy:
             trade_action = "BUY"
-            self.ready_to_buy = False
-        elif not self.ready_to_buy and is_sell:
+        elif is_sell:
             trade_action = "SELL"
-            self.ready_to_buy = True
         else:
             trade_action = "HOLD"
 
@@ -85,20 +81,20 @@ class BTCStrategy:
 
         rates = pd.Series([float(trade.rate) for trade in trades])
         current_price = rates.iloc[0]
-        rolling_mean, upper_band, lower_band = self.calculate_bollinger_bands(rates)
-        normalized_rsi = self.calculate_rsi(rates)
-        volatility = self.calculate_price_volatility(rates)
+        rolling_mean, upper_band, lower_band = self.indexs.calculate_bollinger_bands(
+            rates
+        )
+        normalized_rsi = self.indexs.calculate_rsi(rates)
+        volatility = self.indexs.calculate_price_volatility(rates)
 
         # Determine trade action based on the rolling mean, current price, and state
         is_buy = rolling_mean.iloc[-1] < current_price
         is_sell = rolling_mean.iloc[-1] > current_price
 
-        if self.ready_to_buy and is_buy:
+        if is_buy:
             trade_action = "BUY"
-            self.ready_to_buy = False
-        elif not self.ready_to_buy and is_sell:
+        elif is_sell:
             trade_action = "SELL"
-            self.ready_to_buy = True
         else:
             trade_action = "HOLD"
 
