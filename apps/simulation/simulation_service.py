@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from db_util import UtxDBService
+from models.ticker import Ticker
 
 
 class SimulationService:
@@ -21,6 +23,7 @@ class SimulationService:
         self.start_price = start_price
         self.days = days
         self.volatility = volatility
+        UtxDBService().create_models_tables()
 
     def generate_data(self):
         """
@@ -63,8 +66,8 @@ class SimulationService:
                 "volume": f"{volumes[i]:.8f}",
                 "timestamp": timestamps[i],
             }
+            Ticker.create_ticker_data(record, True)
             data.append(record)
-
         return data
 
 

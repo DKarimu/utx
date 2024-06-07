@@ -31,8 +31,6 @@ class TestSimulationDataGenerator(unittest.TestCase):
             self.assertIn("volume", record)
             self.assertIn("timestamp", record)
 
-            Ticker.create_ticker_data(record)
-
         # Ensure the correct number of data points is generated
         self.assertEqual(len(result), self.days)
 
