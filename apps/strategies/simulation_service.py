@@ -3,10 +3,10 @@ class SimulationService:
         """
         Initializes the Simulation Service with the given parameters.
 
-        :param strategy: An instance of the trading strategy class you wish to test.
-        :param start_date: The start date for the simulation in 'YYYY-MM-DD' format.
-        :param end_date: The end date for the simulation in 'YYYY-MM-DD' format.
-        :param interval: The time interval for each step of the simulation (e.g., '5min', '1h', '1d').
+        :strategy: An instance of the trading strategy class you wish to test.
+        :start_date: The start date for the simulation in 'YYYY-MM-DD' format.
+        :end_date: The end date for the simulation in 'YYYY-MM-DD' format.
+        :interval: The time interval for each step of the simulation (e.g., '5min', '1h', '1d').
         """
         self.strategy = strategy
         self.start_date = start_date
